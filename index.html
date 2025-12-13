@@ -1,1089 +1,767 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>איפוס נשק — צמ"מ 8109</title>
-
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>צמ״מ 8109 — איפוס נשק</title>
   <style>
-    :root {
-      --bg: #020617;
-      --panel: #020617;
-      --panel-border: #1f2937;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --primary: #22c55e;
-      --primary-dark: #16a34a;
-      --accent: #38bdf8;
-      --danger: #ef4444;
+    :root{
+      --bg:#070b14; --panel:#0b1220; --ink:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
+      --green:#22c55e; --cyan:#38bdf8; --red:#ef4444; --amber:#f59e0b;
+      --radius:16px;
     }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial; background:linear-gradient(180deg,#050810,#0b1220); color:var(--ink)}
+    .wrap{max-width:980px;margin:0 auto;padding:14px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 12px}
+    h1{margin:0;font-size:18px}
+    .badge{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:900px){.grid{grid-template-columns:360px 1fr}}
 
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; }
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+    .card h2{margin:0 0 10px;font-size:14px;color:#cbd5e1}
+    label{display:block;font-size:12px;color:#cbd5e1;margin:10px 0 6px}
+    input,select,button{width:100%;padding:10px 10px;border-radius:12px;border:1px solid var(--line);background:#0b1220;color:var(--ink);outline:none}
+    input::placeholder{color:#64748b}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+    .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    button{cursor:pointer;font-weight:700}
+    button.primary{background:linear-gradient(180deg,#1d4ed8,#1e40af);border-color:#1e3a8a}
+    button.ghost{background:transparent}
+    button.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
+    button:disabled{opacity:.55;cursor:not-allowed}
 
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
-      color: var(--text);
-      padding: 16px;
-    }
-
-    header {
-      max-width: 1080px;
-      margin: 0 auto 16px;
-    }
-
-    h1 {
-      margin: 0 0 4px;
-      font-size: 28px;
-    }
-
-    main {
-      max-width: 1080px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    section.panel {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: 14px;
-      border: 1px solid var(--panel-border);
-      padding: 16px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-    }
-
-    section.panel h2 {
-      margin-top: 0;
-      font-size: 18px;
-    }
-
-    .hint { color: var(--muted); font-size: 13px; }
-    .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
-
-    .grid { display: grid; gap: 10px; }
-    .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-    @media (max-width: 800px) {
-      .g3, .g2 { grid-template-columns: 1fr; }
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 14px;
-    }
-
-    .full { display: block; margin-top: 10px; }
-
-    input[type="number"],
-    input[type="text"],
-    select,
-    input[type="file"] {
-      background: #020617;
-      border: 1px solid #1f2937;
-      border-radius: 8px;
-      padding: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    input[type="file"] {
-      padding-inline-start: 0;
-    }
-
-    input:focus,
-    select:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    button {
-      border-radius: 10px;
-      border: 1px solid #4b5563;
-      background: #020617;
-      color: var(--text);
-      padding: 8px 14px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    button.primary {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #052e16;
-      font-weight: 700;
-    }
-
-    button.ghost {
-      background: transparent;
-      border-color: #374151;
-      color: var(--muted);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    a.link {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    a.link:hover { text-decoration: underline; }
-
-    .result { font-weight: 700; font-size: 14px; }
-
-    .canvasWrap {
-      margin-top: 12px;
-      border-radius: 12px;
-      border: 1px dashed #374151;
-      padding: 8px;
-      background: #020617;
-    }
-
-    #zeroingCanvas {
-      width: 100%;
-      max-width: 100%;
-      display: block;
-      background: #020617;
-      border-radius: 8px;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    #modeLabel { font-size: 13px; color: var(--muted); }
-
-    .cert {
-      width: 100%;
-      max-width: 100%;
-      margin-top: 12px;
-      border-radius: 12px;
-      border: 1px solid #1f2937;
-      background: #020617;
-    }
-
-    footer {
-      max-width: 1080px;
-      margin: 16px auto 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-    }
-  
-    .status-excellent{color:#22c55e;font-weight:900;font-size:18px}
-    .status-adjust{color:#38bdf8;font-weight:900;font-size:18px}
-    .status-repeat{color:#ef4444;font-weight:900;font-size:18px}
-    .status-sub{font-size:14px;font-weight:700;margin-top:6px;color:#e5e7eb}
+    .canvasWrap{position:relative}
+    canvas{width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);background:#050814;touch-action:manipulation}
+    .modePill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:#cbd5e1;font-size:12px}
+    .results{margin-top:10px}
+    .status-excellent{color:var(--green);font-weight:900;font-size:18px}
+    .status-adjust{color:var(--cyan);font-weight:900;font-size:18px}
+    .status-repeat{color:var(--red);font-weight:900;font-size:18px}
+    .status-sub{font-size:14px;font-weight:700;margin-top:6px;color:#e2e8f0}
     .status-box{margin-top:10px}
-
+    .kpi{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;font-size:12px;color:#cbd5e1}
+    .errorOverlay{position:fixed;left:10px;right:10px;bottom:10px;z-index:99999;display:none;
+      padding:10px;border:2px solid var(--red);border-radius:12px;background:rgba(2,6,23,.92);color:#e5e7eb;
+      font:12px ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;max-height:32%;overflow:auto}
   </style>
 </head>
 <body>
-  <header>
-    <h1>איפוס נשק — צמ"מ 8109</h1>
-    <p class="hint">⚠ מומלץ לפתוח ב-Chrome / Safari. עובד גם ב-Edge (ללא תוספים חוסמים).</p>
-  </header>
+  <div class="wrap">
+    <header>
+      <h1>איפוס נשק — <span style="color:#cbd5e1">צמ״מ 8109</span></h1>
+      <div class="badge">עובד ב‑GitHub Pages · ללא קבצי JS חיצוניים</div>
+    </header>
 
-  <main>
-    <!-- פרטי מסגרת + פרטי מאפס -->
-    <section class="panel">
-      <h2>פרטי מסגרת ומאפס</h2>
-      <div class="grid g3">
-        <label>
-          פלוגה
-          <select id="unitCompany">
-            <option value="">—</option>
-            <option value="א">א'</option>
-            <option value="ב">ב'</option>
-            <option value="ג">ג'</option>
-          </select>
-        </label>
+    <div class="grid">
+      <div class="card">
+        <h2>פרטי היורה והנשק</h2>
 
-        <label>
-          מחלקה
-          <select id="unitPlatoon">
-            <option value="">—</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-        </label>
+        <label>שם היורה</label>
+        <input id="shooterName" placeholder="שם מלא"/>
 
-        <label>
-          שם המאפס / היורה
-          <input type="text" id="shooterName" placeholder="שם מלא">
-        </label>
-      </div>
-    </section>
+        <div class="row">
+          <div>
+            <label>מסגרת</label>
+            <input id="unitCompany" placeholder="למשל: גדוד / יחידה"/>
+          </div>
+          <div>
+            <label>פלוגה</label>
+            <input id="unitPlatoon" placeholder="למשל: א׳ / ב׳"/>
+          </div>
+        </div>
 
-    <!-- בחירת נשק ואמצעי -->
-    <section class="panel">
-      <h2>נשק ואמצעי כוונת</h2>
-      <div class="grid g2">
-        <label>
-          סוג נשק
-          <select id="weaponType">
-            <option value="">בחירת נשק ידנית</option>
-            <option value="M16">M16</option>
-            <option value="M4">M4</option>
-            <option value="Tavor">תבור</option>
-          </select>
-        </label>
+        <div class="row">
+          <div>
+            <label>מחלקה</label>
+            <input id="unitSquad" placeholder="למשל: 1 / 2"/>
+          </div>
+          <div>
+            <label>סוג נשק</label>
+            <select id="weaponType"></select>
+          </div>
+        </div>
 
-        <label>
-          אמצעי / סוג כוונת
-          <select id="opticType">
-            <option value="">ללא (ערכים ידניים)</option>
-            <option value="iron">כוונות ברזל</option>
-            <option value="optic">כוונת אופטית</option>
-            <option value="trijicon">Trijicon / ACOG</option>
-          </select>
-        </label>
-      </div>
+        <label>אמצעי (כוונת/ברזל/טריג'יקון)</label>
+        <select id="opticType"></select>
 
-      <p class="note">
-        בחירת נשק ואמצעי תמשוך אוטומטית את היחס מ־<code>weapons.json</code> (אותו אתה עורך כאדמין).
-        תמיד ניתן לשנות ידנית למטה.
-      </p>
-    </section>
+        <div class="row">
+          <div>
+            <label>קליקים לקובייה (הגבהה)</label>
+            <input id="elevClicksPerSquare" type="number" step="0.1" value="3"/>
+          </div>
+          <div>
+            <label>קליקים לקובייה (צידוד)</label>
+            <input id="windClicksPerSquare" type="number" step="0.1" value="3"/>
+          </div>
+        </div>
 
-    <!-- יחס קובייה / קליקים -->
-    <section class="panel">
-      <h2>הגדרת קליקים לנשק הנבחר</h2>
-      <div class="grid g3">
-        <label>
-          גודל קובייה בדף (בס"מ)
-          <input type="number" id="gridSizeCm" value="1" step="0.1" min="0.1">
-        </label>
-        <label>
-          זיהוי קובייה אוטומטי (px ל-1 ס״מ)
-          <input type="text" id="autoGridInfo" value="—" readonly>
-        </label>
-        <label>
-          קליקים בגובה לקובייה אחת
-          <input type="number" id="elevClicksPerSquare" value="0" step="0.1" min="0">
-        </label>
-        <label>
-          קליקים בצידוד לקובייה אחת
-          <input type="number" id="windClicksPerSquare" value="0" step="0.1" min="0">
-        </label>
-      </div>
-      <p class="note">
-        אתה כמאפס יכול לערוך כאן ידנית לכל ירי. שינוי הקבועים לכל נשק/אמצעי נעשה בקובץ <code>weapons.json</code> בגיטהאב.
-      </p>
-      <div class="actions">
-        <button id="btnConfirmRatios" class="primary">אישור יחס קובייה-קליקים</button>
-      </div>
-    </section>
+        <div class="row">
+          <div>
+            <label>גודל קובייה בדף (ס״מ)</label>
+            <input id="gridSizeCm" type="number" step="0.1" min="0.1" value="1"/>
+            <div class="hint">ברירת מחדל 1 ס״מ. אם המטרה אחרת — עדכן.</div>
+          </div>
+          <div>
+            <label>סטטוס טעינת weapons.json</label>
+            <input id="weaponLoadStatus" readonly value="טוען…"/>
+            <div class="hint">אם נכשל – עדיין אפשר להקליד ידנית קליקים לקובייה.</div>
+          </div>
+        </div>
 
-    <!-- העלאת דף איפוס -->
-    <section class="panel">
-      <h2>צילום / העלאת דף איפוס</h2>
-      <label class="full">
-        בחר קובץ תמונה (JPG / PNG)
-        <input type="file" id="zeroingImage" accept="image/*">
-      </label>
-      <p class="note">
-        צלם את דף האיפוס מלמעלה, כמה שיותר ישר, ושמור כתמונה במכשיר. לאחר מכן בחר כאן את התמונה.
-      </p>
+        <h2 style="margin-top:14px">פעולות</h2>
 
-      <div class="canvasWrap">
-        <canvas id="zeroingCanvas"></canvas>
+        <label>העלאת תמונת מטרה</label>
+        <input id="fileInput" type="file" accept="image/*"/>
+
+        <div class="btns">
+          <button id="btnModeDesired" class="ghost">שלב 1: נק׳ מכוון</button>
+          <button id="btnModeHits" class="ghost">שלב 2: פגיעות</button>
+          <button id="btnModeRuler" class="ghost">שלב 3: מדידת 1 ס״מ</button>
+          <button id="btnReset" class="danger">איפוס סימונים</button>
+        </div>
+
+        <div class="btns">
+          <button id="btnCompute" class="primary">חשב תיקון</button>
+          <button id="btnCert" class="ghost">צור תעודה</button>
+        </div>
+
+        <div class="hint">
+          טיפ: במובייל הדיוק טוב יותר כאשר אתה עושה זום 1× ולא “מגדיל” דרך הדפדפן.
+        </div>
+
+        <div class="results" id="resultBox"></div>
       </div>
 
-      <div class="toolbar">
-        <span id="modeLabel">מצב: נקודת רצויה</span>
-        <button id="btnDesiredHit">סמן נקודת פגיעה רצויה</button>
-        <button id="btnRuler">מדידת 1 ס"מ (סרגל)</button>
-        <button id="btnHits">סימון פגיעות</button>
-        <button id="btnClearHits" class="ghost">ניקוי פגיעות</button>
+      <div class="card">
+        <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <span>תמונה וסימון</span>
+          <span class="modePill" id="modeLabel">מצב: העלה תמונה</span>
+        </h2>
+
+        <div class="canvasWrap">
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="kpi">
+          <div class="chip" id="kpiScale">סקייל: —</div>
+          <div class="chip" id="kpiGrid">px ל‑1 ס״מ: —</div>
+          <div class="chip" id="kpiHits">פגיעות: 0</div>
+        </div>
+
+        <canvas id="certCanvas" style="display:none"></canvas>
       </div>
-      <p class="hint">
-        סדר פעולות מומלץ: 1️⃣ נקודת פגיעה רצויה 2️⃣ מדידת 1 ס"מ 3️⃣ סימון כל הפגיעות.
-      </p>
-    </section>
+    </div>
+  </div>
 
-    <!-- חישוב תוצאה ותעודה -->
-    <section class="panel">
-      <h2>חישוב תיקון, גודל מקבץ ותעודת איפוס</h2>
-      <div class="actions">
-        <button id="btnCompute" class="primary">חשב תיקון כוונת</button>
-        <p id="resultText" class="result"></p>
-      </div>
-
-      <hr>
-
-      <div class="actions">
-        <button id="btnMakeCert">צור תעודת איפוס</button>
-        <button id="btnOpenWhatsApp" class="ghost">פתח WhatsApp לשליחת התעודה</button>
-        <a id="btnDownloadCert" class="link" download="zeroing_certificate.png">
-          הורד תעודת איפוס כתמונה
-        </a>
-      </div>
-
-      <canvas id="certCanvas" width="1024" height="768" class="cert"></canvas>
-      <p class="hint">
-        לאחר הורדת התמונה ניתן לשתף אותה דרך WhatsApp (שיתוף → WhatsApp + בחירת התמונה מהגלריה).
-      </p>
-    </section>
-  </main>
-
-  <footer>
-    <small>© 2025 — נבנה ל-GitHub Pages. ללא ספריות חיצוניות. עובד ב-Chrome/Safari/Edge.</small>
-  </footer>
-  <script>
-    const DEFAULT_WEAPONS = [{"id": "m4", "name": "M4 / M16", "elevClicksPerCm": 4, "windClicksPerCm": 4}, {"id": "tavor", "name": "Tavor (X95)", "elevClicksPerCm": 4, "windClicksPerCm": 4}, {"id": "negev", "name": "Negev", "elevClicksPerCm": 2, "windClicksPerCm": 2}];
-    // ===== הגדרות ו-state =====
-    let WEAPON_RATIOS = {}; // נטען מ-weapons.json
-
-    const state = {
-      mode: 'desired',
-      image: null,
-      pixelsPerCm: null,
-      desiredHit: null,
-      ruler: [],
-      hits: [],
-      config: {
-        gridSizeCm: 1,
-        elevClicksPerSquare: 0,
-        windClicksPerSquare: 0
-      },
-      result: null,
-      overlayMsg: 'העלה תמונה כדי להתחיל'
-    };
-
-    const el = {
-      unitCompany: document.getElementById('unitCompany'),
-      unitPlatoon: document.getElementById('unitPlatoon'),
-      shooterName: document.getElementById('shooterName'),
-      weaponType: document.getElementById('weaponType'),
-      opticType: document.getElementById('opticType'),
-      gridSizeCm: document.getElementById('gridSizeCm'),
-      elevClicksPerSquare: document.getElementById('elevClicksPerSquare'),
-      windClicksPerSquare: document.getElementById('windClicksPerSquare'),
-      autoGridInfo: document.getElementById('autoGridInfo'),
-      btnConfirmRatios: document.getElementById('btnConfirmRatios'),
-      fileInput: document.getElementById('zeroingImage'),
-      canvas: document.getElementById('zeroingCanvas'),
-      modeLabel: document.getElementById('modeLabel'),
-      btnDesiredHit: document.getElementById('btnDesiredHit'),
-      btnRuler: document.getElementById('btnRuler'),
-      btnHits: document.getElementById('btnHits'),
-      btnClearHits: document.getElementById('btnClearHits'),
-      btnCompute: document.getElementById('btnCompute'),
-      resultText: document.getElementById('resultText'),
-      btnMakeCert: document.getElementById('btnMakeCert'),
-      btnDownloadCert: document.getElementById('btnDownloadCert'),
-      btnOpenWhatsApp: document.getElementById('btnOpenWhatsApp'),
-      certCanvas: document.getElementById('certCanvas')
-    };
-
-    const ctx = el.canvas.getContext('2d');
-    const certCtx = el.certCanvas.getContext('2d');
-
-    // ===== טעינת weapons.json =====
-    async function loadWeaponRatios() {
-      try {
-        const res = await fetch('./weapons.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        WEAPON_RATIOS = await res.json();
-        console.log('weapons.json loaded', WEAPON_RATIOS);
-      } catch (err) {
-        console.warn('לא הצלחתי לטעון weapons.json, ממשיכים עם ערכים ידניים בלבד', err);
-        WEAPON_RATIOS = {};
-      }
-    }
-
-    // ===== פונקציות עזר =====
-    function setMode(mode) {
-      state.mode = mode;
-      let label = 'מצב: ';
-      if (mode === 'desired') label += 'נקודת רצויה';
-      else if (mode === 'ruler') label += 'סרגל 1 ס"מ';
-      else if (mode === 'hits') label += 'סימון פגיעות';
-      el.modeLabel.textContent = label;
-
-      if (!state.image) state.overlayMsg = 'העלה תמונה כדי להתחיל';
-      else if (mode === 'desired') state.overlayMsg = 'שלב 1/3: לחץ על נקודת המכוון (נקודת פגיעה רצויה)';
-      else if (mode === 'ruler') state.overlayMsg = 'שלב 2/3: (אופציונלי) דייק ידנית 1 ס״מ — 2 נקודות על קו רשת';
-      else if (mode === 'hits') state.overlayMsg = 'שלב 3/3: סמן פגיעות, ואז לחץ "חשב תיקון כוונת"';
-      else state.overlayMsg = 'בחר פעולה';
-
-      draw();
-    }
-
-    function dist(a, b) {
-      const dx = a.x - b.x;
-      const dy = a.y - b.y;
-      return Math.hypot(dx, dy);
-    }
-
-    function avg(points) {
-      const n = points.length;
-      if (!n) return null;
-      let sx = 0, sy = 0;
-      points.forEach(p => { sx += p.x; sy += p.y; });
-      return { x: sx / n, y: sy / n };
-    }
-
-    function pxToCm(px) {
-      if (!state.pixelsPerCm) return null;
-      return px / state.pixelsPerCm;
-    }
-
-    function cmToSquares(cm) {
-      return cm / state.config.gridSizeCm;
-    }
-
-
-    function classifyZeroing(groupSizeCm, correctionCm) {
-      if (groupSizeCm < 5 && correctionCm < 1) {
-        return { code: 'EXCELLENT', text: 'נשק מאופס' };
-      }
-      if (groupSizeCm < 5 && correctionCm > 1 && correctionCm < 4) {
-        return { code: 'ADJUST_ONLY', text: 'נדרש תיקון ללא מקצה נוסף' };
-      }
-      return { code: 'NEED_ANOTHER_ROUND', text: 'נדרש מקצה נוסף' };
-    }
-
-
-    function applyRatiosFromInputs() {
-      state.config.gridSizeCm = parseFloat(el.gridSizeCm.value) || 1;
-      state.config.elevClicksPerSquare = parseFloat(el.elevClicksPerSquare.value) || 0;
-      state.config.windClicksPerSquare = parseFloat(el.windClicksPerSquare.value) || 0;
-    }
-
-    function updateRatiosFromWeapon() {
-      const weapon = el.weaponType.value;
-      const optic = el.opticType.value;
-      if (!weapon || !optic) return;
-
-      const weaponCfg = WEAPON_RATIOS[weapon];
-      if (!weaponCfg) return;
-      const opticCfg = weaponCfg[optic];
-      if (!opticCfg) return;
-
-      el.elevClicksPerSquare.value = opticCfg.elevClicksPerSquare ?? 0;
-      el.windClicksPerSquare.value = opticCfg.windClicksPerSquare ?? 0;
-      applyRatiosFromInputs();
-    }
-
-    // ===== ציור =====
-    function clearCanvas() {
-      ctx.clearRect(0, 0, el.canvas.width, el.canvas.height);
-    }
-
-    function draw() {
-      clearCanvas();
-      if (!state.image) return;
-
-      ctx.drawImage(state.image, 0, 0, el.canvas.width, el.canvas.height);
-
-      if (state.desiredHit) {
-        drawCross(state.desiredHit.x, state.desiredHit.y, '#22c55e');
-        label(state.desiredHit.x + 6, state.desiredHit.y - 10, 'רצוי', '#22c55e');
-      
-      drawOverlayBar(state.overlayMsg);
-    }
-
-      if (state.ruler.length === 2) {
-        const [a, b] = state.ruler;
-        drawLine(a, b, '#38bdf8');
-        drawCircle(a.x, a.y, 7, '#38bdf8');
-        drawCircle(b.x, b.y, 7, '#38bdf8');
-        const d = dist(a, b);
-        label((a.x + b.x) / 2, (a.y + b.y) / 2 - 12,
-          `1 ס"מ (${d.toFixed(1)}px)`, '#38bdf8');
-      } else if (state.ruler.length === 1) {
-        drawCircle(state.ruler[0].x, state.ruler[0].y, 7, '#38bdf8');
-      }
-
-      if (state.hits.length) {
-        state.hits.forEach(p => drawCircle(p.x, p.y, 8, '#ef4444'));
-        const c = avg(state.hits);
-        if (c) {
-          drawCross(c.x, c.y, '#ef4444');
-          label(c.x + 6, c.y - 10, 'מרכז קבוצה', '#ef4444');
-        }
-      }
-    }
-
-    function drawCircle(x, y, r, color) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    function drawCross(x, y, color) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
-      const size = 10;
-      ctx.beginPath();
-      ctx.moveTo(x - size, y);
-      ctx.lineTo(x + size, y);
-      ctx.moveTo(x, y - size);
-      ctx.lineTo(x, y + size);
-      ctx.stroke();
-    }
-
-    function drawLine(a, b, color) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
-    }
-
-    function label(x, y, text, color) {
-      ctx.fillStyle = color;
-      ctx.font = 'bold 13px system-ui';
-      ctx.textAlign = 'left';
-      ctx.fillText(text, x, y);
-    }
-
-
-    function drawOverlayBar(text) {
-      const h = 44;
-      const pad = 10;
-      ctx.save();
-      ctx.globalAlpha = 0.90;
-      ctx.fillStyle = '#0b1220';
-      ctx.fillRect(0, el.canvas.height - h, el.canvas.width, h);
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#1f2937';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(0, el.canvas.height - h, el.canvas.width, h);
-      ctx.fillStyle = '#e5e7eb';
-      ctx.font = 'bold 15px system-ui';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(text || '', el.canvas.width - pad, el.canvas.height - h/2);
-      ctx.restore();
-    }
-
-
-    // ===== אירועים =====
-    el.weaponType.addEventListener('change', updateRatiosFromWeapon);
-    el.opticType.addEventListener('change', updateRatiosFromWeapon);
-
-    el.btnConfirmRatios.addEventListener('click', () => {
-      applyRatiosFromInputs();
-      alert('יחס קובייה-קליקים עודכן.');
-    });
-
-    el.fileInput.addEventListener('change', (ev) => {
-      const file = ev.target.files[0];
-      if (!file) return;
-
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        // Resize canvas to fit image (same logic as original)
-        const maxW = 1400;
-        const scale = Math.min(1, maxW / img.width);
-        el.canvas.width = Math.round(img.width * scale);
-        el.canvas.height = Math.round(img.height * scale);
-
-        state.image = img;
-        state.desiredHit = null;
-        state.ruler = [];
-        state.hits = [];
-        state.result = null;
-        state.pixelsPerCm = null;
-
-        // draw immediately
-        setMode('desired');
-        draw();
-
-        // Auto grid detection (non-blocking, 4s timeout)
-        if (el.autoGridInfo) el.autoGridInfo.value = 'מזהה… (עד 4 שנ׳)';
-        runAutoGridWithTimeout(img, 4000).then((g) => {
-          if (!el.autoGridInfo) return;
-          if (g && g.timeout) {
-            el.autoGridInfo.value = 'זיהוי אוטומטי נכשל/התעכב. אפשר להמשיך ידנית עם סרגל.';
-            return;
-          }
-          if (g && isFinite(g.px) && g.px > 0) {
-            state.pixelsPerCm = g.px; // assume 1 square = 1cm by default
-            el.autoGridInfo.value = `אוטומטי: ~${g.px.toFixed(1)}px (X ${g.pxX.toFixed(1)} / Y ${g.pxY.toFixed(1)})` + (g.lowConfidence ? ' — אמינות נמוכה, מומלץ לדייק ידנית' : '');
-          } else {
-            el.autoGridInfo.value = 'לא זוהתה רשת בביטחון. אפשר להמשיך ידנית עם סרגל.';
-          }
-        }).catch(()=>{
-          if (el.autoGridInfo) el.autoGridInfo.value = 'שגיאה בזיהוי אוטומטי. אפשר להמשיך ידנית עם סרגל.';
-        });
-
-        URL.revokeObjectURL(url);
-      };
-      img.src = url;
-    });
-
-    el.btnDesiredHit.addEventListener('click', () => setMode('desired'));
-    el.btnRuler.addEventListener('click', () => {
-      state.ruler = [];
-      state.pixelsPerCm = null;
-      setMode('ruler');
-    });
-    el.btnHits.addEventListener('click', () => setMode('hits'));
-    el.btnClearHits.addEventListener('click', () => {
-      state.hits = [];
-      draw();
-    });
-
-    // קליק / טאץ' מדויק על הקנבס
-    el.canvas.addEventListener('click', handleCanvasClick);
-
-    function handleCanvasClick(ev) {
-      if (!state.image) return;
-      const rect = el.canvas.getBoundingClientRect();
-      const scaleX = el.canvas.width / rect.width;
-      const scaleY = el.canvas.height / rect.height;
-      const x = (ev.clientX - rect.left) * scaleX;
-      const y = (ev.clientY - rect.top) * scaleY;
-
-      if (state.mode === 'desired') {
-        state.desiredHit = { x, y };
-        setMode('hits');
-        return;
-      } else if (state.mode === 'ruler') {
-        state.ruler.push({ x, y });
-        if (state.ruler.length > 2) {
-          state.ruler = state.ruler.slice(-2);
-        }
-        if (state.ruler.length === 2) {
-          const dpx = dist(state.ruler[0], state.ruler[1]);
-          state.pixelsPerCm = dpx; // שתי הנקודות = 1 ס"מ
-        }
-      } else if (state.mode === 'hits') {
-        state.hits.push({ x, y });
-      }
-
-      draw();
-    }
-
-    // חישוב תיקון + גודל מקבץ
-    el.btnCompute.addEventListener('click', () => {
-      if (!state.desiredHit) {
-        alert('יש לסמן נקודת פגיעה רצויה.');
-        return;
-      }
-      if (state.hits.length === 0) {
-        alert('יש לסמן לפחות פגיעה אחת.');
-        return;
-      }
-      if (!state.pixelsPerCm) {
-        alert('יש למדוד 1 ס"מ על הדף (סרגל) לפני החישוב.');
-        return;
-      }
-
-      applyRatiosFromInputs();
-
-      const center = avg(state.hits);
-      const dxPx = center.x - state.desiredHit.x;
-      const dyPx = center.y - state.desiredHit.y;
-
-      const dxCm = pxToCm(dxPx);
-      const dyCm = pxToCm(dyPx);
-
-      const dxSquares = cmToSquares(Math.abs(dxCm));
-      const dySquares = cmToSquares(Math.abs(dyCm));
-
-      const elevClicks = Math.round(dySquares * state.config.elevClicksPerSquare);
-      const windClicks = Math.round(dxSquares * state.config.windClicksPerSquare);
-
-      // ✅ כיוון התיקון הוא הפוך לכיוון הסטייה
-      const correctionHorizDir =
-        dxCm > 0 ? 'שמאלה' :
-        dxCm < 0 ? 'ימינה' : '—';
-
-      const correctionVertDir =
-        dyCm > 0 ? 'מעלה'  :   // הפגיעה מתחת -> מתקנים מעלה
-        dyCm < 0 ? 'מטה'   :   // הפגיעה מעל -> מתקנים מטה
-        '—';
-
-      // גודל מקבץ: המרחק הכי גדול בין שתי פגיעות
-      let maxDistPx = 0;
-      for (let i = 0; i < state.hits.length; i++) {
-        for (let j = i + 1; j < state.hits.length; j++) {
-          const d = dist(state.hits[i], state.hits[j]);
-          if (d > maxDistPx) maxDistPx = d;
-        }
-      }
-      const groupSizeCm = maxDistPx ? pxToCm(maxDistPx) : 0;
-      const groupSizeSquares = groupSizeCm ? cmToSquares(groupSizeCm) : 0;
-
-      state.result = {
-        dxCm, dyCm,
-        elevClicks, windClicks,
-        correctionHorizDir, correctionVertDir,
-        groupSizeCm, groupSizeSquares
-      };
-
-      const groupText = groupSizeCm
-        ? ` | גודל מקבץ ≈ ${groupSizeCm.toFixed(1)} ס"מ (${groupSizeSquares.toFixed(1)} קוביות)`
-        : '';
-
-      el.resultText.textContent =
-        `תיקון: צידוד ${windClicks} קליקים ${correctionHorizDir} | ` +
-        `גובה ${elevClicks} קליקים ${correctionVertDir}` + groupText;
-    });
-
-    // ===== תעודת איפוס =====
-    function drawCertificate() {
-      if (!state.image || !state.result) return;
-
-      const img = state.image;
-
-      // Canvas size: match displayed canvas size for consistency
-      el.certCanvas.width = el.canvas.width;
-      el.certCanvas.height = el.canvas.height;
-      const ctx2 = el.certCanvas.getContext('2d');
-
-      // Draw base image + current markings
-      ctx2.drawImage(img, 0, 0, el.certCanvas.width, el.certCanvas.height);
-      ctx2.drawImage(el.canvas, 0, 0);
-
-      // Gather details
-      const shooter = (el.shooterName?.value || '').trim() || '—';
-      const company = (el.company?.value || '').trim() || '—';
-      const platoon = (el.platoon?.value || '').trim() || '—';
-      const squad = (el.squad?.value || '').trim() || '—';
-      const weaponName = (el.weaponSelect?.selectedOptions?.[0]?.textContent || '').trim() || '—';
-
-      const dt = new Date();
-      const dateStr = dt.toLocaleDateString('he-IL');
-      const timeStr = dt.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-
-      const groupCm = state.result.groupSizeCm;
-      const radial = state.result.radialErrorCm;
-      const status = state.result.status;
-
-      const statusColor =
-        status.code === 'EXCELLENT' ? '#22c55e' :
-        status.code === 'ADJUST_ONLY' ? '#38bdf8' :
-        '#ef4444';
-
-      // Bottom overlay panel (readable on white/black)
-      const pad = 14;
-      const panelH = 150;
-      const y0 = el.certCanvas.height - panelH;
-
-      ctx2.save();
-      ctx2.globalAlpha = 0.86;
-      ctx2.fillStyle = '#0b1220';
-      ctx2.fillRect(0, y0, el.certCanvas.width, panelH);
-      ctx2.globalAlpha = 1;
-      ctx2.strokeStyle = 'rgba(255,255,255,0.18)';
-      ctx2.lineWidth = 2;
-      ctx2.strokeRect(0, y0, el.certCanvas.width, panelH);
-
-      ctx2.fillStyle = '#e5e7eb';
-      ctx2.textAlign = 'right';
-      ctx2.textBaseline = 'top';
-
-      // Title
-      ctx2.font = 'bold 18px system-ui';
-      ctx2.fillText('תעודת איפוס — צמ״מ 8109', el.certCanvas.width - pad, y0 + 10);
-
-      // Details
-      ctx2.font = '15px system-ui';
-      const baseY = y0 + 42;
-      const lh = 22;
-
-      ctx2.fillText(`יורה: ${shooter} | מסגרת: ${company} | פלוגה: ${platoon} | מחלקה: ${squad}`, el.certCanvas.width - pad, baseY + 0*lh);
-      ctx2.fillText(`תאריך: ${dateStr}  שעה: ${timeStr} | נשק: ${weaponName}`, el.certCanvas.width - pad, baseY + 1*lh);
-      ctx2.fillText(`גודל מקבץ: ${isFinite(groupCm)?groupCm.toFixed(2):'—'} ס״מ | סטיית מרכז: ${isFinite(radial)?radial.toFixed(2):'—'} ס״מ`, el.certCanvas.width - pad, baseY + 2*lh);
-
-      // Status line (always)
-      ctx2.font = 'bold 18px system-ui';
-      ctx2.fillStyle = statusColor;
-      ctx2.fillText(`סטטוס איפוס: ${status.text}`, el.certCanvas.width - pad, y0 + 110);
-
-      // If correction required (both adjust-only and another round)
-      if (status.code !== 'EXCELLENT') {
-        ctx2.font = 'bold 14px system-ui';
-        ctx2.fillStyle = '#e5e7eb';
-        ctx2.fillText(
-          `נדרש תיקון: צידוד ${state.result.windClicks} קליקים ${state.result.correctionHorizDir} , גובה ${state.result.elevClicks} קליקים ${state.result.correctionVertDir}`,
-          el.certCanvas.width - pad,
-          y0 + 134
-        );
-      }
-
-      ctx2.restore();
-    } = state.result;
-
-        ctx2.fillText(
-          `תיקון כוונת: צידוד ${windClicks} קליקים ${correctionHorizDir}, גובה ${elevClicks} קליקים ${correctionVertDir}`,
-          60, 240
-        );
-
-        if (groupSizeCm) {
-          ctx2.fillText(
-            `גודל מקבץ: ≈ ${groupSizeCm.toFixed(1)} ס"מ (${groupSizeSquares.toFixed(1)} קוביות)`,
-            60, 270
-          );
-        }
-
-        // ✅ תנאי "הנשק אופס בהצלחה"
-        if (groupSizeCm) {
-          const radialErrorCm = Math.sqrt(dxCm * dxCm + dyCm * dyCm);
-          if (groupSizeCm < 5 && Math.abs(radialErrorCm) < 2) {
-            ctx2.fillStyle = '#22c55e';
-            ctx2.fillText(
-              'הנשק אופס בהצלחה (מקבץ < 5 ס"מ וסטייה < 2 ס"מ מנקודת המכוון)',
-              60, 300
-            );
-            ctx2.fillStyle = '#e5e7eb';
-          }
-        }
-      }
-
-      // צילום דף איפוס ממוזער
-      if (el.canvas.width && el.canvas.height) {
-        const thumbW = 320;
-        const ratio = el.canvas.height / el.canvas.width;
-        const thumbH = thumbW * ratio;
-
-        ctx2.drawImage(
-          el.canvas,
-          0, 0, el.canvas.width, el.canvas.height,
-          c.width - thumbW - 60, 130, thumbW, thumbH
-        );
-
-        ctx2.strokeStyle = '#374151';
-        ctx2.strokeRect(c.width - thumbW - 60, 130, thumbW, thumbH);
-        ctx2.fillStyle = '#94a3b8';
-        ctx2.font = '14px system-ui';
-        ctx2.fillText('צילום דף איפוס (ממוזער)', c.width - thumbW - 60, 120);
-      }
-    }
-
-    el.btnMakeCert.addEventListener('click', () => {
-      drawCertificate();
-      const dataURL = el.certCanvas.toDataURL('image/png');
-      el.btnDownloadCert.href = dataURL;
-      alert('התעודה נוצרה. הורד את התמונה לשמירה/שיתוף.');
-    });
-
-    // וואטסאפ – ⚠ אי אפשר לצרף קובץ אוטומטית מהדפדפן, רק לפתוח הודעה עם טקסט
-    el.btnOpenWhatsApp.addEventListener('click', () => {
-      const msg = encodeURIComponent(
-        'תעודת איפוס נוצרה. שמור את תמונת התעודה והתמונה מהדף כקובצי תמונה, ' +
-        'ולאחר מכן צרף אותם ידנית מתוך הגלריה להודעת ה-WhatsApp.'
-      );
-      window.open(`https://wa.me/?text=${msg}`, '_blank');
-    });
-
-    
-    async function runAutoGridWithTimeout(img, ms) {
-      return await Promise.race([
-        new Promise((resolve) => {
-          setTimeout(() => {
-            let g = null;
-            try { g = detectGridPxFromImage(img); } catch (e) { g = null; }
-            resolve(g);
-          }, 0);
-        }),
-        new Promise((resolve) => setTimeout(() => resolve({ timeout: true }), ms))
-      ]);
-    }
-
-    function detectGridPxFromImage(img) {
-      // Robust grid period estimation (px per square) using projection + autocorrelation.
-      const maxW = 1100;
-      const s = Math.min(maxW / img.width, 1);
-      const w = Math.max(360, Math.round(img.width * s));
-      const h = Math.round(img.height * s);
-
-      const off = document.createElement('canvas');
-      off.width = w; off.height = h;
-      const ox = off.getContext('2d', { willReadFrequently: true });
-      ox.drawImage(img, 0, 0, w, h);
-
-      const data = ox.getImageData(0, 0, w, h).data;
-      const gray = new Uint8Array(w * h);
-      for (let i = 0, p = 0; i < w * h; i++, p += 4) {
-        gray[i] = (data[p] * 0.299 + data[p + 1] * 0.587 + data[p + 2] * 0.114) | 0;
-      }
-      const idx = (x, y) => y * w + x;
-
-      const rois = [
-        { x0: 0.62, x1: 0.95, y0: 0.18, y1: 0.62 },
-        { x0: 0.05, x1: 0.38, y0: 0.18, y1: 0.62 },
-        { x0: 0.35, x1: 0.65, y0: 0.18, y1: 0.62 },
-        { x0: 0.20, x1: 0.80, y0: 0.05, y1: 0.35 },
-      ];
-
-      let best = null;
-
-      for (const r of rois) {
-        const rx0 = Math.floor(w * r.x0), rx1 = Math.floor(w * r.x1);
-        const ry0 = Math.floor(h * r.y0), ry1 = Math.floor(h * r.y1);
-
-        const projX = new Float64Array(rx1 - rx0);
-        const projY = new Float64Array(ry1 - ry0);
-
-        for (let y = ry0 + 1; y < ry1 - 1; y++) {
-          for (let x = rx0 + 1; x < rx1 - 1; x++) {
-            const gx =
-              -gray[idx(x - 1, y - 1)] + gray[idx(x + 1, y - 1)] +
-              -2 * gray[idx(x - 1, y)] + 2 * gray[idx(x + 1, y)] +
-              -gray[idx(x - 1, y + 1)] + gray[idx(x + 1, y + 1)];
-            const gy =
-              -gray[idx(x - 1, y - 1)] - 2 * gray[idx(x, y - 1)] - gray[idx(x + 1, y - 1)] +
-              gray[idx(x - 1, y + 1)] + 2 * gray[idx(x, y + 1)] + gray[idx(x + 1, y + 1)];
-            const mag = Math.abs(gx) + Math.abs(gy);
-            projX[x - rx0] += mag;
-            projY[y - ry0] += mag;
-          }
-        }
-
-        const resX = estimatePeriodAutocorr(projX);
-        const resY = estimatePeriodAutocorr(projY);
-        if (!resX || !resY) continue;
-
-        const pxX = resX.period;
-        const pxY = resY.period;
-        const px = (pxX + pxY) / 2;
-
-        const agree = 1 - Math.min(1, Math.abs(pxX - pxY) / Math.max(px, 1));
-        const score = (resX.score + resY.score) * 0.5 * (0.4 + 0.6 * agree);
-
-        if (!best || score > best.score) best = { px, pxX, pxY, score };
-      }
-
-      if (!best) return null;
-
-      const s2 = el.canvas.width / img.width;
-      const pxOnCanvas = best.px * (s2 / s);
-      const pxXOnCanvas = best.pxX * (s2 / s);
-      const pxYOnCanvas = best.pxY * (s2 / s);
-      const diffRatio = Math.abs(pxXOnCanvas - pxYOnCanvas) / Math.max(pxOnCanvas, 1);
-
-      return { px: pxOnCanvas, pxX: pxXOnCanvas, pxY: pxYOnCanvas, lowConfidence: diffRatio > 0.22 };
-    }
-
-    function estimatePeriodAutocorr(signal) {
-      const n = signal.length;
-      if (n < 120) return null;
-
-      let mean = 0;
-      for (let i = 0; i < n; i++) mean += signal[i];
-      mean /= n;
-
-      const s = new Float64Array(n);
-      for (let i = 0; i < n; i++) s[i] = Math.max(0, signal[i] - mean);
-
-      const win = 11;
-      const sm = new Float64Array(n);
-      let acc = 0;
-      for (let i = 0; i < n; i++) {
-        acc += s[i];
-        if (i >= win) acc -= s[i - win];
-        sm[i] = acc / Math.min(i + 1, win);
-      }
-
-      const minLag = 10;
-      const maxLag = Math.min(260, Math.floor(n / 2));
-      if (maxLag <= minLag + 5) return null;
-
-      let energy = 0;
-      for (let i = 0; i < n; i++) energy += sm[i] * sm[i];
-      if (energy <= 1e-9) return null;
-
-      let bestLag = null;
-      let bestVal = -1;
-
-      for (let lag = minLag; lag <= maxLag; lag++) {
-        let c = 0;
-        for (let i = 0; i < n - lag; i++) c += sm[i] * sm[i + lag];
-        const val = c / energy;
-        if (val > bestVal) { bestVal = val; bestLag = lag; }
-      }
-      if (!bestLag) return null;
-
-      const vals = [];
-      for (let lag = Math.max(minLag, bestLag - 12); lag <= Math.min(maxLag, bestLag + 12); lag++) {
-        let c = 0;
-        for (let i = 0; i < n - lag; i++) c += sm[i] * sm[i + lag];
-        vals.push(c / energy);
-      }
-      vals.sort((a,b)=>a-b);
-      const med = vals[Math.floor(vals.length/2)] || 0;
-      const score = Math.max(0, bestVal - med);
-
-      if (bestVal < 0.08 || score < 0.015) return null;
-      return { period: bestLag, score };
-    }
-
-    // אתחול
-    applyRatiosFromInputs();
-    setMode('desired');
-    loadWeaponRatios();
-  </script>
+  <div class="errorOverlay" id="errorOverlay"></div>
 
 <script>
-  // Error overlay (so we can debug on mobile without DevTools)
-  (function(){
-    const box = document.createElement('div');
-    box.style.position='fixed';
-    box.style.left='10px';
-    box.style.right='10px';
-    box.style.bottom='10px';
-    box.style.zIndex='99999';
-    box.style.maxHeight='32%';
-    box.style.overflow='auto';
-    box.style.display='none';
-    box.style.padding='10px';
-    box.style.border='2px solid #ef4444';
-    box.style.borderRadius='12px';
-    box.style.background='rgba(2,6,23,.92)';
-    box.style.color='#e5e7eb';
-    box.style.font='12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
-    document.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(box));
-    function show(msg){
-      box.style.display='block';
-      box.textContent = msg;
+(function(){
+  'use strict';
+
+  // --- Elements
+  var el = {
+    shooterName: document.getElementById('shooterName'),
+    unitCompany: document.getElementById('unitCompany'),
+    unitPlatoon: document.getElementById('unitPlatoon'),
+    unitSquad: document.getElementById('unitSquad'),
+    weaponType: document.getElementById('weaponType'),
+    opticType: document.getElementById('opticType'),
+    elevClicksPerSquare: document.getElementById('elevClicksPerSquare'),
+    windClicksPerSquare: document.getElementById('windClicksPerSquare'),
+    gridSizeCm: document.getElementById('gridSizeCm'),
+    weaponLoadStatus: document.getElementById('weaponLoadStatus'),
+    fileInput: document.getElementById('fileInput'),
+    btnModeDesired: document.getElementById('btnModeDesired'),
+    btnModeHits: document.getElementById('btnModeHits'),
+    btnModeRuler: document.getElementById('btnModeRuler'),
+    btnReset: document.getElementById('btnReset'),
+    btnCompute: document.getElementById('btnCompute'),
+    btnCert: document.getElementById('btnCert'),
+    resultBox: document.getElementById('resultBox'),
+    modeLabel: document.getElementById('modeLabel'),
+    canvas: document.getElementById('canvas'),
+    certCanvas: document.getElementById('certCanvas'),
+    kpiScale: document.getElementById('kpiScale'),
+    kpiGrid: document.getElementById('kpiGrid'),
+    kpiHits: document.getElementById('kpiHits'),
+    errorOverlay: document.getElementById('errorOverlay')
+  };
+
+  // --- Error overlay (mobile friendly)
+  function showErr(msg) {
+    el.errorOverlay.style.display = 'block';
+    el.errorOverlay.textContent = msg;
+  }
+  window.addEventListener('error', function(e) {
+    showErr('JS ERROR: ' + (e.message||'') + '\n' + (e.filename||'') + ':' + (e.lineno||''));
+  });
+  window.addEventListener('unhandledrejection', function(e) {
+    showErr('PROMISE ERROR: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+  });
+
+  // --- State
+  var state = {
+    image: null,
+    mode: 'idle', // idle | desired | hits | ruler
+    desired: null,
+    hits: [],
+    ruler: [], // two points
+    pixelsPerCm: null,
+    overlayMsg: 'העלה תמונה כדי להתחיל',
+    result: null,
+    weapons: null
+  };
+
+  // --- Canvas setup (HiDPI)
+  var ctx = el.canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+
+  function resizeCanvasToDisplay() {
+    var rect = el.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      // give a default height before image
+      el.canvas.style.height = '520px';
+      rect = el.canvas.getBoundingClientRect();
     }
-    window.addEventListener('error', (e)=>{
-      show('JS ERROR: ' + (e.message||'') + '\n' + (e.filename||'') + ':' + (e.lineno||'') );
-    });
-    window.addEventListener('unhandledrejection', (e)=>{
-      show('PROMISE ERROR: ' + (e.reason?.message || String(e.reason)));
-    });
-    window.__showError = show;
-  })();
+    var needW = Math.round(rect.width * dpr);
+    var needH = Math.round(rect.height * dpr);
+    if (el.canvas.width !== needW || el.canvas.height !== needH) {
+      el.canvas.width = needW;
+      el.canvas.height = needH;
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+  }
+
+  function clear() {
+    resizeCanvasToDisplay();
+    ctx.clearRect(0,0,el.canvas.width/dpr, el.canvas.height/dpr);
+    ctx.fillStyle = '#050814';
+    ctx.fillRect(0,0,el.canvas.width/dpr, el.canvas.height/dpr);
+  }
+
+  function getCanvasPoint(evt) {
+    var rect = el.canvas.getBoundingClientRect();
+    var x = (evt.clientX - rect.left);
+    var y = (evt.clientY - rect.top);
+    return {x:x, y:y};
+  }
+
+  function dist(a,b) {
+    var dx=a.x-b.x, dy=a.y-b.y;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+
+  function avg(points) {
+    if (!points.length) return null;
+    var sx=0, sy=0;
+    for (var i=0;i<points.length;i++) { sx += points[i].x; sy += points[i].y; }
+    return {x:sx/points.length, y:sy/points.length};
+  }
+
+  function drawCross(x,y,color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x-14,y); ctx.lineTo(x+14,y);
+    ctx.moveTo(x,y-14); ctx.lineTo(x,y+14);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawCircle(x,y,r,color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+    // outline for visibility
+    ctx.strokeStyle = 'rgba(0,0,0,.55)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLine(a,b,color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawOverlayBar(text) {
+    var w = el.canvas.width/dpr;
+    var h = el.canvas.height/dpr;
+    var barH = 48;
+    ctx.save();
+    ctx.globalAlpha = 0.86;
+    ctx.fillStyle = '#0b1220';
+    ctx.fillRect(0, h-barH, w, barH);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, h-barH, w, barH);
+    ctx.fillStyle = '#e5e7eb';
+    ctx.font = 'bold 15px system-ui';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text || '', w-12, h-barH/2);
+    ctx.restore();
+  }
+
+  // --- Image fit
+  var view = {x:0,y:0,w:0,h:0, scale:1}; // image drawn into canvas area
+  function fitImage() {
+    var w = el.canvas.width/dpr;
+    var h = el.canvas.height/dpr;
+    // Keep some space for overlay bar, but we draw image full; overlay on top.
+    var img = state.image;
+    if (!img) return;
+    var s = Math.min(w / img.width, h / img.height);
+    var dw = img.width * s;
+    var dh = img.height * s;
+    var ox = (w - dw) / 2;
+    var oy = (h - dh) / 2;
+    view = {x:ox, y:oy, w:dw, h:dh, scale:s};
+    el.kpiScale.textContent = 'סקייל: ' + s.toFixed(3);
+  }
+
+  function draw() {
+    clear();
+    if (!state.image) {
+      drawOverlayBar(state.overlayMsg);
+      return;
+    }
+    fitImage();
+    // draw image
+    ctx.drawImage(state.image, view.x, view.y, view.w, view.h);
+
+    // marks are stored in canvas coords (CSS px), so keep them consistent with view.
+    if (state.desired) {
+      drawCross(state.desired.x, state.desired.y, '#22c55e');
+      drawCircle(state.desired.x, state.desired.y, 6, '#22c55e');
+    }
+
+    if (state.ruler.length) {
+      drawCircle(state.ruler[0].x, state.ruler[0].y, 7, '#38bdf8');
+      if (state.ruler.length === 2) {
+        drawCircle(state.ruler[1].x, state.ruler[1].y, 7, '#38bdf8');
+        drawLine(state.ruler[0], state.ruler[1], '#38bdf8');
+      }
+    }
+
+    if (state.hits.length) {
+      for (var i=0;i<state.hits.length;i++) drawCircle(state.hits[i].x, state.hits[i].y, 8, '#ef4444');
+      var c = avg(state.hits);
+      if (c) drawCross(c.x, c.y, '#ef4444');
+    }
+
+    // KPIs
+    el.kpiHits.textContent = 'פגיעות: ' + state.hits.length;
+    el.kpiGrid.textContent = 'px ל‑1 ס״מ: ' + (state.pixelsPerCm ? state.pixelsPerCm.toFixed(1) : '—');
+
+    drawOverlayBar(state.overlayMsg);
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    if (!state.image) {
+      state.overlayMsg = 'העלה תמונה כדי להתחיל';
+      el.modeLabel.textContent = 'מצב: העלה תמונה';
+      draw();
+      return;
+    }
+    if (mode === 'desired') {
+      el.modeLabel.textContent = 'מצב: נק׳ מכוון';
+      state.overlayMsg = 'שלב 1: לחץ על נקודת המכוון (נקודה רצויה)';
+    } else if (mode === 'hits') {
+      el.modeLabel.textContent = 'מצב: פגיעות';
+      state.overlayMsg = 'שלב 2: סמן פגיעות (כל לחיצה מוסיפה). להסרה: לחיצה ארוכה על "איפוס סימונים"';
+    } else if (mode === 'ruler') {
+      el.modeLabel.textContent = 'מצב: מדידת 1 ס״מ';
+      state.overlayMsg = 'שלב 3: לחץ 2 נקודות על מרחק של קובייה אחת (1 ס״מ או לפי "גודל קובייה")';
+    } else {
+      el.modeLabel.textContent = 'מצב: —';
+      state.overlayMsg = '';
+    }
+    draw();
+  }
+
+  function resetMarks() {
+    state.desired = null;
+    state.hits = [];
+    state.ruler = [];
+    state.pixelsPerCm = null;
+    state.result = null;
+    el.resultBox.innerHTML = '';
+    if (state.image) setMode('desired');
+    draw();
+  }
+
+  // --- Classification rules (as requested)
+  function classifyZeroing(groupSizeCm, correctionCm) {
+    if (groupSizeCm < 5 && correctionCm < 1) return {code:'EXCELLENT', text:'נשק מאופס'};
+    if (groupSizeCm < 5 && correctionCm > 1 && correctionCm < 4) return {code:'ADJUST_ONLY', text:'נדרש תיקון ללא מקצה נוסף'};
+    return {code:'NEED_ANOTHER_ROUND', text:'נדרש מקצה נוסף'};
+  }
+
+  function signDirHoriz(dxCm) {
+    // hits right => move LEFT
+    if (dxCm > 0.0001) return 'שמאלה';
+    if (dxCm < -0.0001) return 'ימינה';
+    return 'ללא';
+  }
+  function signDirVert(dyCm) {
+    // hits below (positive dy) => move UP (raise)
+    if (dyCm > 0.0001) return 'מעלה';
+    if (dyCm < -0.0001) return 'מטה';
+    return 'ללא';
+  }
+
+  function compute() {
+    el.resultBox.innerHTML = '';
+    state.result = null;
+
+    if (!state.image || !state.desired || state.hits.length < 1) {
+      el.resultBox.innerHTML = '<div class="hint">נדרש: תמונה + נקודת מכוון + לפחות פגיעה אחת.</div>';
+      return;
+    }
+
+    // pixelsPerCm: from ruler (preferred)
+    var gridSizeCm = parseFloat(el.gridSizeCm.value || '1');
+    if (gridSizeCm <= 0) gridSizeCm = 1;
+
+    if (state.ruler.length === 2) {
+      var px = dist(state.ruler[0], state.ruler[1]);
+      state.pixelsPerCm = px / gridSizeCm;
+    }
+
+    if (!state.pixelsPerCm || !isFinite(state.pixelsPerCm) || state.pixelsPerCm < 1) {
+      el.resultBox.innerHTML = '<div class="hint">לא הוגדר יחס px לס״מ. עבור ל"מדידת 1 ס״מ" והגדר 2 נקודות.</div>';
+      return;
+    }
+
+    var c = avg(state.hits);
+    var dxPx = c.x - state.desired.x;
+    var dyPx = c.y - state.desired.y;
+
+    var dxCm = dxPx / state.pixelsPerCm;
+    var dyCm = dyPx / state.pixelsPerCm;
+
+    var radialErrorCm = Math.sqrt(dxCm*dxCm + dyCm*dyCm);
+
+    // Group size: max pairwise distance in cm
+    var maxDpx = 0;
+    for (var i=0;i<state.hits.length;i++) {
+      for (var j=i+1;j<state.hits.length;j++) {
+        var d = dist(state.hits[i], state.hits[j]);
+        if (d > maxDpx) maxDpx = d;
+      }
+    }
+    var groupSizeCm = maxDpx / state.pixelsPerCm;
+
+    // clicks per square (square is gridSizeCm cm)
+    var elevCPS = parseFloat(el.elevClicksPerSquare.value || '0');
+    var windCPS = parseFloat(el.windClicksPerSquare.value || '0');
+    if (!isFinite(elevCPS) || elevCPS < 0) elevCPS = 0;
+    if (!isFinite(windCPS) || windCPS < 0) windCPS = 0;
+
+    var squaresX = Math.abs(dxCm) / gridSizeCm;
+    var squaresY = Math.abs(dyCm) / gridSizeCm;
+
+    var windClicks = Math.round(squaresX * windCPS);
+    var elevClicks = Math.round(squaresY * elevCPS);
+
+    var correctionHorizDir = signDirHoriz(dxCm);
+    var correctionVertDir = signDirVert(dyCm);
+
+    var status = classifyZeroing(groupSizeCm, radialErrorCm);
+
+    state.result = {
+      dxCm: dxCm, dyCm: dyCm,
+      radialErrorCm: radialErrorCm,
+      groupSizeCm: groupSizeCm,
+      windClicks: windClicks,
+      elevClicks: elevClicks,
+      correctionHorizDir: correctionHorizDir,
+      correctionVertDir: correctionVertDir,
+      status: status
+    };
+
+    // Render result (colored, and ALWAYS show corrections if not excellent)
+    var cls = (status.code === 'EXCELLENT') ? 'status-excellent' : (status.code === 'ADJUST_ONLY') ? 'status-adjust' : 'status-repeat';
+    var html = '<div class="status-box">';
+    html += '<div class="'+cls+'">סטטוס: ' + status.text + '</div>';
+    html += '<div class="status-sub">גודל מקבץ: ' + groupSizeCm.toFixed(2) + ' ס״מ</div>';
+    html += '<div class="status-sub">סטיית מרכז: ' + radialErrorCm.toFixed(2) + ' ס״מ</div>';
+
+    if (status.code !== 'EXCELLENT') {
+      html += '<div class="status-sub">נדרש תיקון: צידוד ' + windClicks + ' קליקים ' + correctionHorizDir +
+              ' , הגבהה ' + elevClicks + ' קליקים ' + correctionVertDir + '</div>';
+    }
+    html += '</div>';
+
+    el.resultBox.innerHTML = html;
+
+    state.overlayMsg = 'חושב תיקון. אפשר ליצור תעודה.';
+    draw();
+  }
+
+  function drawCertificate() {
+    if (!state.image || !state.result) return;
+
+    // Prepare certificate canvas in same CSS size as main canvas
+    var w = el.canvas.width / dpr;
+    var h = el.canvas.height / dpr;
+
+    el.certCanvas.width = Math.round(w * dpr);
+    el.certCanvas.height = Math.round(h * dpr);
+    var c2 = el.certCanvas.getContext('2d');
+    c2.setTransform(dpr,0,0,dpr,0,0);
+
+    // draw current main canvas (includes marks and overlay)
+    c2.drawImage(el.canvas, 0, 0, w, h);
+
+    // bottom translucent panel
+    var panelH = 150;
+    var y0 = h - panelH;
+    c2.save();
+    c2.globalAlpha = 0.86;
+    c2.fillStyle = '#0b1220';
+    c2.fillRect(0, y0, w, panelH);
+    c2.globalAlpha = 1;
+    c2.strokeStyle = 'rgba(255,255,255,0.18)';
+    c2.lineWidth = 2;
+    c2.strokeRect(0, y0, w, panelH);
+
+    // details
+    var shooter = (el.shooterName.value || '').trim() || '—';
+    var company = (el.unitCompany.value || '').trim() || '—';
+    var platoon = (el.unitPlatoon.value || '').trim() || '—';
+    var squad = (el.unitSquad.value || '').trim() || '—';
+    var weaponName = (el.weaponType.value || '—') + (el.opticType.value ? (' / ' + el.opticType.value) : '');
+
+    var dt = new Date();
+    var dateStr = dt.toLocaleDateString('he-IL');
+    var timeStr = dt.toLocaleTimeString('he-IL', {hour:'2-digit',minute:'2-digit'});
+
+    var r = state.result;
+    var status = r.status;
+    var statusColor = (status.code === 'EXCELLENT') ? '#22c55e' : (status.code === 'ADJUST_ONLY') ? '#38bdf8' : '#ef4444';
+
+    var pad = 14;
+    c2.fillStyle = '#e5e7eb';
+    c2.textAlign = 'right';
+    c2.textBaseline = 'top';
+
+    c2.font = 'bold 18px system-ui';
+    c2.fillText('תעודת איפוס — צמ״מ 8109', w - pad, y0 + 10);
+
+    c2.font = '15px system-ui';
+    var baseY = y0 + 42, lh = 22;
+    c2.fillText('יורה: ' + shooter + ' | מסגרת: ' + company + ' | פלוגה: ' + platoon + ' | מחלקה: ' + squad, w - pad, baseY + 0*lh);
+    c2.fillText('תאריך: ' + dateStr + '  שעה: ' + timeStr + ' | נשק: ' + weaponName, w - pad, baseY + 1*lh);
+    c2.fillText('גודל מקבץ: ' + r.groupSizeCm.toFixed(2) + ' ס״מ | סטיית מרכז: ' + r.radialErrorCm.toFixed(2) + ' ס״מ', w - pad, baseY + 2*lh);
+
+    // Always show status line
+    c2.font = 'bold 18px system-ui';
+    c2.fillStyle = statusColor;
+    c2.fillText('סטטוס איפוס: ' + status.text, w - pad, y0 + 110);
+
+    // If correction required show extra line (also for "מקצה נוסף")
+    if (status.code !== 'EXCELLENT') {
+      c2.font = 'bold 14px system-ui';
+      c2.fillStyle = '#e5e7eb';
+      c2.fillText('נדרש תיקון: צידוד ' + r.windClicks + ' קליקים ' + r.correctionHorizDir +
+                  ' , הגבהה ' + r.elevClicks + ' קליקים ' + r.correctionVertDir,
+                  w - pad, y0 + 134);
+    }
+
+    c2.restore();
+  }
+
+  function downloadCert() {
+    drawCertificate();
+    var a = document.createElement('a');
+    a.download = 'zeroing_certificate.png';
+    a.href = el.certCanvas.toDataURL('image/png');
+    a.click();
+  }
+
+  // --- Weapons.json loader
+  function fillWeaponUI(WEAPON_RATIOS) {
+    // Populate weapon select
+    el.weaponType.innerHTML = '';
+    var weaponKeys = Object.keys(WEAPON_RATIOS || {});
+    weaponKeys.sort();
+    for (var i=0;i<weaponKeys.length;i++) {
+      var opt = document.createElement('option');
+      opt.value = weaponKeys[i];
+      opt.textContent = weaponKeys[i];
+      el.weaponType.appendChild(opt);
+    }
+    if (!weaponKeys.length) {
+      var opt2 = document.createElement('option');
+      opt2.value = '—';
+      opt2.textContent = '—';
+      el.weaponType.appendChild(opt2);
+    }
+
+    function updateOptics() {
+      var w = el.weaponType.value;
+      el.opticType.innerHTML = '';
+      var m = (WEAPON_RATIOS && WEAPON_RATIOS[w]) ? WEAPON_RATIOS[w] : null;
+      var optics = m ? Object.keys(m) : [];
+      optics.sort();
+      for (var j=0;j<optics.length;j++) {
+        var o = document.createElement('option');
+        o.value = optics[j];
+        o.textContent = optics[j];
+        el.opticType.appendChild(o);
+      }
+      if (!optics.length) {
+        var o2 = document.createElement('option'); o2.value='—'; o2.textContent='—'; el.opticType.appendChild(o2);
+      }
+      applyRatios();
+    }
+
+    function applyRatios() {
+      var w = el.weaponType.value;
+      var o = el.opticType.value;
+      var r = (WEAPON_RATIOS && WEAPON_RATIOS[w] && WEAPON_RATIOS[w][o]) ? WEAPON_RATIOS[w][o] : null;
+      if (r) {
+        if (typeof r.elevClicksPerSquare === 'number') el.elevClicksPerSquare.value = String(r.elevClicksPerSquare);
+        if (typeof r.windClicksPerSquare === 'number') el.windClicksPerSquare.value = String(r.windClicksPerSquare);
+      }
+    }
+
+    el.weaponType.addEventListener('change', updateOptics);
+    el.opticType.addEventListener('change', applyRatios);
+    updateOptics();
+  }
+
+  function loadWeapons() {
+    el.weaponLoadStatus.value = 'טוען…';
+    fetch('./weapons.json', {cache:'no-store'})
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(json) {
+        state.weapons = json;
+        el.weaponLoadStatus.value = 'נטען ✅';
+        fillWeaponUI(json);
+      })
+      .catch(function(err) {
+        el.weaponLoadStatus.value = 'נכשל ❌ (אפשר ידני)';
+        // keep UI usable
+        fillWeaponUI({});
+      });
+  }
+
+  // --- Events
+  el.fileInput.addEventListener('change', function() {
+    var f = el.fileInput.files && el.fileInput.files[0];
+    if (!f) return;
+
+    var url = URL.createObjectURL(f);
+    var img = new Image();
+    img.onload = function() {
+      state.image = img;
+
+      // Set canvas height based on image ratio for better layout
+      var wrapW = el.canvas.getBoundingClientRect().width || 900;
+      var ratio = img.height / img.width;
+      var desiredH = Math.min(820, Math.max(420, wrapW * ratio));
+      el.canvas.style.height = desiredH.toFixed(0) + 'px';
+
+      resetMarks();
+      setMode('desired');
+      draw();
+
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = function() {
+      showErr('שגיאה בטעינת תמונה. נסה קובץ אחר.');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+
+  el.canvas.addEventListener('click', function(evt) {
+    if (!state.image) return;
+    var p = getCanvasPoint(evt);
+
+    if (state.mode === 'desired') {
+      state.desired = p;
+      // auto move to hits
+      setMode('hits');
+      return;
+    }
+
+    if (state.mode === 'hits') {
+      state.hits.push(p);
+      draw();
+      return;
+    }
+
+    if (state.mode === 'ruler') {
+      if (state.ruler.length >= 2) state.ruler = [];
+      state.ruler.push(p);
+      if (state.ruler.length === 2) {
+        var gridSizeCm = parseFloat(el.gridSizeCm.value || '1');
+        if (gridSizeCm <= 0) gridSizeCm = 1;
+        var px = dist(state.ruler[0], state.ruler[1]);
+        state.pixelsPerCm = px / gridSizeCm;
+        state.overlayMsg = 'מדידה נשמרה: ' + state.pixelsPerCm.toFixed(1) + ' px ל‑1 ס״מ';
+      }
+      draw();
+      return;
+    }
+  });
+
+  // Long press reset to remove last hit (optional)
+  var resetTimer = null;
+  el.btnReset.addEventListener('pointerdown', function() {
+    resetTimer = setTimeout(function() {
+      // long press: remove last hit
+      if (state.hits.length) state.hits.pop();
+      draw();
+    }, 650);
+  });
+  el.btnReset.addEventListener('pointerup', function() {
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = null;
+  });
+  el.btnReset.addEventListener('click', function() {
+    resetMarks();
+  });
+
+  el.btnModeDesired.addEventListener('click', function(){ setMode('desired'); });
+  el.btnModeHits.addEventListener('click', function(){ setMode('hits'); });
+  el.btnModeRuler.addEventListener('click', function(){ setMode('ruler'); });
+
+  el.btnCompute.addEventListener('click', compute);
+  el.btnCert.addEventListener('click', downloadCert);
+
+  window.addEventListener('resize', function(){ draw(); });
+
+  // init
+  clear();
+  drawOverlayBar(state.overlayMsg);
+  loadWeapons();
+
+})();
 </script>
 </body>
 </html>
-
