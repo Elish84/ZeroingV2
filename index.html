@@ -269,7 +269,7 @@
 
       <p class="note">
         בחירת נשק ואמצעי תמשוך אוטומטית את היחס מ־<code>weapons.json</code> (אותו אתה עורך כאדמין).
-        תמיד ניתן לשנות ידנית למטה.<br><span id="weaponLoadStatus" class="hint">סטטוס טעינת weapons.json: …</span>
+        תמיד ניתן לשנות ידנית למטה.
       </p>
     </section>
 
@@ -384,7 +384,6 @@
       shooterName: document.getElementById('shooterName'),
       weaponType: document.getElementById('weaponType'),
       opticType: document.getElementById('opticType'),
-      weaponLoadStatus: document.getElementById('weaponLoadStatus'),
       gridSizeCm: document.getElementById('gridSizeCm'),
       elevClicksPerSquare: document.getElementById('elevClicksPerSquare'),
       windClicksPerSquare: document.getElementById('windClicksPerSquare'),
@@ -414,14 +413,8 @@
         const res = await fetch('./weapons.json', { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         WEAPON_RATIOS = await res.json();
-        if (el.weaponLoadStatus) el.weaponLoadStatus.textContent = 'סטטוס טעינת weapons.json: נטען ✅';
         console.log('weapons.json loaded', WEAPON_RATIOS);
       } catch (err) {
-        console.warn('לא הצלחתי לטעון weapons.json, ממשיכים עם ערכים ידניים בלבד', err);
-        WEAPON_RATIOS = {};
-        if (el.weaponLoadStatus) el.weaponLoadStatus.textContent = 'סטטוס טעינת weapons.json: נכשל ❌ (ודא שמופעל GitHub Pages ושהקובץ באותה תיקייה)';
-      }
-    } catch (err) {
         console.warn('לא הצלחתי לטעון weapons.json, ממשיכים עם ערכים ידניים בלבד', err);
         WEAPON_RATIOS = {};
       }
@@ -515,29 +508,7 @@
       if (state.desiredHit) {
         drawCross(state.desiredHit.x, state.desiredHit.y, '#22c55e');
         label(state.desiredHit.x + 6, state.desiredHit.y - 10, 'רצוי', '#22c55e');
-      }
-
-      if (state.ruler.length === 2) {
-        const [a, b] = state.ruler;
-        drawLine(a, b, '#38bdf8');
-        drawCircle(a.x, a.y, 7, '#38bdf8');
-        drawCircle(b.x, b.y, 7, '#38bdf8');
-        const d = dist(a, b);
-        label((a.x + b.x) / 2, (a.y + b.y) / 2 - 12,
-          `1 ס"מ (${d.toFixed(1)}px)`, '#38bdf8');
-      } else if (state.ruler.length === 1) {
-        drawCircle(state.ruler[0].x, state.ruler[0].y, 7, '#38bdf8');
-      }
-
-      if (state.hits.length) {
-        state.hits.forEach(p => drawCircle(p.x, p.y, 8, '#ef4444'));
-        const c = avg(state.hits);
-        if (c) {
-          drawCross(c.x, c.y, '#ef4444');
-          label(c.x + 6, c.y - 10, 'מרכז קבוצה', '#ef4444');
-        }
-      }
-
+      
       drawOverlayBar(state.overlayMsg);
     }
 
@@ -781,19 +752,10 @@
         ? ` | גודל מקבץ ≈ ${groupSizeCm.toFixed(1)} ס"מ (${groupSizeSquares.toFixed(1)} קוביות)`
         : '';
 
-      let statusClass =
-        state.result.status.code === 'EXCELLENT' ? 'status-excellent' :
-        state.result.status.code === 'ADJUST_ONLY' ? 'status-adjust' :
-        'status-repeat';
-
-      let statusHtml = `<div class="status-box"><div class="${statusClass}">סטטוס: ${state.result.status.text}</div>`;
-      if (state.result.status.code !== 'EXCELLENT') {
-        statusHtml += `<div class="status-sub">נדרש תיקון: צידוד ${state.result.windClicks} קליקים ${state.result.correctionHorizDir} , גובה ${state.result.elevClicks} קליקים ${state.result.correctionVertDir}</div>`;
-      }
-      statusHtml += `<div class="status-sub">מקבץ: ${state.result.groupSizeCm.toFixed(2)} ס״מ</div></div>`;
-      el.resultText.innerHTML = statusHtml;
-
-          });
+      el.resultText.textContent =
+        `תיקון: צידוד ${windClicks} קליקים ${correctionHorizDir} | ` +
+        `גובה ${elevClicks} קליקים ${correctionVertDir}` + groupText;
+    });
 
     // ===== תעודת איפוס =====
     function drawCertificate() {
@@ -812,10 +774,10 @@
 
       // Gather details
       const shooter = (el.shooterName?.value || '').trim() || '—';
-      const company = (el.unitCompany?.value || '').trim() || '—';
-      const platoon = (el.unitPlatoon?.value || '').trim() || '—';
+      const company = (el.company?.value || '').trim() || '—';
+      const platoon = (el.platoon?.value || '').trim() || '—';
       const squad = (el.squad?.value || '').trim() || '—';
-            const weaponName = (el.weaponType?.value || '—') + (el.opticType?.value ? (' / ' + el.opticType.value) : '');
+      const weaponName = (el.weaponSelect?.selectedOptions?.[0]?.textContent || '').trim() || '—';
 
       const dt = new Date();
       const dateStr = dt.toLocaleDateString('he-IL');
