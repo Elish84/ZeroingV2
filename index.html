@@ -1012,13 +1012,15 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            // הדבק כאן את הקונפיג מה-Firebase Console (Web App)
-            apiKey: "XXX",
-            authDomain: "XXX",
-            projectId: "XXX",
-            appId: "XXX"
-        };
+          const firebaseConfig = {
+            apiKey: "AIzaSyDmWczKhA4EQEPDGx1MpcsLSsOFkh953mY",
+            authDomain: "zeroing-db.firebaseapp.com",
+            projectId: "zeroing-db",
+            storageBucket: "zeroing-db.firebasestorage.app",
+            messagingSenderId: "318886269966",
+            appId: "1:318886269966:web:2657c7e9ccaba8ed47585f",
+            measurementId: "G-8FHDJ6Q74L"
+          };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -1034,4 +1036,5 @@
 
 </body>
 </html>
+
 
