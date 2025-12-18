@@ -194,6 +194,7 @@
     }
 
 
+
   function applyLists() {
     // Build option objects with default blank
     function toOpts(arr){
@@ -697,11 +698,11 @@
       .then(function(res){
         if(!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
-
+      })
       .then(function(json){
         state.weapons = json;
         fillWeaponUI(json);
-
+      })
       .catch(function(_err){
         fillWeaponUI({});
       });
