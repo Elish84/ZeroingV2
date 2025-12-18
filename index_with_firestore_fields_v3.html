@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>צמ״מ 8109 — איפוס נשק</title>
+  <style>
+    :root{
+      --bg:#070b14; --panel:#0b1220; --ink:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
+      --green:#22c55e; --cyan:#38bdf8; --red:#ef4444; --amber:#f59e0b;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial; background:linear-gradient(180deg,#050810,#0b1220); color:var(--ink)}
+    .wrap{max-width:980px;margin:0 auto;padding:14px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 12px}
+    h1{margin:0;font-size:18px}
+    .badge{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:900px){.grid{grid-template-columns:360px 1fr}}
+
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+    .card h2{margin:0 0 10px;font-size:14px;color:#cbd5e1}
+    label{display:block;font-size:12px;color:#cbd5e1;margin:10px 0 6px}
+    input,select,button{width:100%;padding:10px 10px;border-radius:12px;border:1px solid var(--line);background:#0b1220;color:var(--ink);outline:none}
+    input::placeholder{color:#64748b}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+    .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    button{cursor:pointer;font-weight:700}
+    button.primary{background:linear-gradient(180deg,#1d4ed8,#1e40af);border-color:#1e3a8a}
+    button.ghost{background:transparent}
+    button.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+
+    .canvasWrap{position:relative}
+    canvas{width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);background:#050814;touch-action:manipulation}
+    .modePill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:#cbd5e1;font-size:12px}
+    .results{margin-top:10px}
+    .status-excellent{color:var(--green);font-weight:900;font-size:18px}
+    .status-adjust{color:var(--cyan);font-weight:900;font-size:18px}
+    .status-repeat{color:var(--red);font-weight:900;font-size:18px}
+    .status-sub{font-size:14px;font-weight:700;margin-top:6px;color:#e2e8f0}
+    .status-box{margin-top:10px}
+    .kpi{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;font-size:12px;color:#cbd5e1}
+    .errorOverlay{position:fixed;left:10px;right:10px;bottom:10px;z-index:99999;display:none;
+      padding:10px;border:2px solid var(--red);border-radius:12px;background:rgba(2,6,23,.92);color:#e5e7eb;
+      font:12px ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;max-height:32%;overflow:auto}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>איפוס נשק — <span style="color:#cbd5e1">צמ״מ 8109</span></h1>
+      <div class="badge">עובד ב‑GitHub Pages · ללא קבצי JS חיצוניים</div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>פרטי היורה והנשק</h2>
+
+        <label>שם היורה</label>
+        <input id="shooterName" placeholder="שם מלא"/>
+<label>גודל מקבץ (ס״מ)</label>
+        <input id="groupSizeCm" type="number" step="0.01" min="0" placeholder="יחושב אוטומטית לאחר חישוב" />
+<div class="row">
+          <div>
+            <label>יחידה</label>
+            <select id="unitCompany"></select>
+          </div>
+          <div>
+            <label>פלוגה</label>
+            <select id="unitPlatoon"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>מחלקה</label>
+            <select id="unitSquad"></select>
+          </div>
+          <div>
+            <label>סוג נשק</label>
+            <select id="weaponType"></select>
+          </div>
+        </div>
+
+        <label>אמצעי (כוונת/ברזל/טריג'יקון)</label>
+        <select id="opticType"></select>
+
+        <div class="row">
+          <div>
+            <label>קליקים לקובייה (הגבהה)</label>
+            <input id="elevClicksPerSquare" type="number" step="0.1" value="3"/>
+          </div>
+          <div>
+            <label>קליקים לקובייה (צידוד)</label>
+            <input id="windClicksPerSquare" type="number" step="0.1" value="3"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>גודל קובייה בדף (ס״מ)</label>
+            <input id="gridSizeCm" type="number" step="0.1" min="0.1" value="1"/>
+            <div class="hint">ברירת מחדל 1 ס״מ. אם המטרה אחרת — עדכן.</div>
+          </div>
+          
+        </div>
+
+        <h2 style="margin-top:14px">פעולות</h2>
+
+        <label>העלאת תמונת מטרה</label>
+        <input id="fileInput" type="file" accept="image/*"/>
+
+        <div class="btns">
+          <button id="btnModeDesired" class="ghost">שלב 1: נק׳ מכוון</button>
+          <button id="btnModeHits" class="ghost">שלב 2: פגיעות</button>
+          <button id="btnModeRuler" class="ghost">שלב 3: מדידת 1 ס״מ</button>
+          <button id="btnReset" class="danger">איפוס סימונים</button>
+        </div>
+
+        <div class="btns">
+          <button id="btnCompute" class="primary">חשב תיקון</button>
+          <button id="btnCert" class="ghost">צור תעודה</button>
+        </div>
+
+        <div class="hint">
+          טיפ: במובייל הדיוק טוב יותר כאשר אתה עושה זום 1× ולא “מגדיל” דרך הדפדפן.
+        </div>
+
+        <div class="results" id="resultBox"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <span>תמונה וסימון</span>
+          <span class="modePill" id="modeLabel">מצב: העלה תמונה</span>
+        </h2>
+
+        <div class="canvasWrap">
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="kpi">
+          <div class="chip" id="kpiScale">סקייל: —</div>
+          <div class="chip" id="kpiGrid">px ל‑1 ס״מ: —</div>
+          <div class="chip" id="kpiHits">פגיעות: 0</div>
+        </div>
+
+        <canvas id="certCanvas" style="display:none"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="errorOverlay" id="errorOverlay"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // --- Lists config loaded from JSON (editable)
+  var LISTS = null;
+
+  function fillSelect(selectEl, items) {
+    if (!selectEl) return;
+    selectEl.innerHTML = '';
+    for (var i=0;i<items.length;i++) {
+      var opt = document.createElement('option');
+      opt.value = items[i].value;
+      opt.textContent = items[i].label;
+      selectEl.appendChild(opt);
+    }
+  }
+
+    function loadListsConfig() {
+        var u = new URL('lists.json', window.location.href);
+        u.searchParams.set('v', String(Date.now())); // cache-buster
+
+        return fetch(u.toString(), { cache: 'no-store' })
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            }) // <-- זה היה חסר אצלך: צריך }) ולא רק }
+            .then(function (cfg) {
+                LISTS = cfg;
+                applyLists();
+            })
+            .catch(function (_err) {
+                LISTS = { unit: [], company: [], squad: [] };
+                applyLists();
+            });
+    }
+
+
+  function applyLists() {
+    // Build option objects with default blank
+    function toOpts(arr){
+      var out = [{value:'',label:''}];
+      for (var i=0;i<(arr||[]).length;i++) out.push({value:String(arr[i]), label:String(arr[i])});
+      return out;
+    }
+    fillSelect(el.unitCompany, toOpts((LISTS && LISTS.unit) || []));
+    fillSelect(el.unitPlatoon, toOpts((LISTS && LISTS.company) || []));
+    fillSelect(el.unitSquad, toOpts((LISTS && LISTS.squad) || []));
+
+  }
+
+  // --- Elements
+  var el = {
+    shooterName: document.getElementById('shooterName'),
+groupSizeCm: document.getElementById('groupSizeCm'),
+    unitCompany: document.getElementById('unitCompany'),
+    unitPlatoon: document.getElementById('unitPlatoon'),
+    unitSquad: document.getElementById('unitSquad'),
+    weaponType: document.getElementById('weaponType'),
+    opticType: document.getElementById('opticType'),
+    elevClicksPerSquare: document.getElementById('elevClicksPerSquare'),
+    windClicksPerSquare: document.getElementById('windClicksPerSquare'),
+    gridSizeCm: document.getElementById('gridSizeCm'),
+        fileInput: document.getElementById('fileInput'),
+    btnModeDesired: document.getElementById('btnModeDesired'),
+    btnModeHits: document.getElementById('btnModeHits'),
+    btnModeRuler: document.getElementById('btnModeRuler'),
+    btnReset: document.getElementById('btnReset'),
+    btnCompute: document.getElementById('btnCompute'),
+    btnCert: document.getElementById('btnCert'),
+    resultBox: document.getElementById('resultBox'),
+    modeLabel: document.getElementById('modeLabel'),
+    canvas: document.getElementById('canvas'),
+    certCanvas: document.getElementById('certCanvas'),
+    kpiScale: document.getElementById('kpiScale'),
+    kpiGrid: document.getElementById('kpiGrid'),
+    kpiHits: document.getElementById('kpiHits'),
+    errorOverlay: document.getElementById('errorOverlay')
+  };
+
+  // --- Error overlay (mobile friendly)
+  function showErr(msg) {
+    el.errorOverlay.style.display = 'block';
+    el.errorOverlay.textContent = msg;
+  }
+  window.addEventListener('error', function(e) {
+    showErr('JS ERROR: ' + (e.message||'') + '\n' + (e.filename||'') + ':' + (e.lineno||''));
+  });
+  window.addEventListener('unhandledrejection', function(e) {
+    showErr('PROMISE ERROR: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+  });
+
+  // --- State
+  var state = {
+    image: null,
+    mode: 'idle', // idle | desired | hits | ruler
+    desired: null,
+    hits: [],
+    ruler: [], // two points
+    pixelsPerCm: null,
+    overlayMsg: 'העלה תמונה כדי להתחיל',
+    result: null,
+    weapons: null
+  };
+
+  // --- Canvas setup (HiDPI)
+  var ctx = el.canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+
+  function resizeCanvasToDisplay() {
+    var rect = el.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      // give a default height before image
+      el.canvas.style.height = '520px';
+      rect = el.canvas.getBoundingClientRect();
+    }
+    var needW = Math.round(rect.width * dpr);
+    var needH = Math.round(rect.height * dpr);
+    if (el.canvas.width !== needW || el.canvas.height !== needH) {
+      el.canvas.width = needW;
+      el.canvas.height = needH;
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+  }
+
+  function clear() {
+    resizeCanvasToDisplay();
+    ctx.clearRect(0,0,el.canvas.width/dpr, el.canvas.height/dpr);
+    ctx.fillStyle = '#050814';
+    ctx.fillRect(0,0,el.canvas.width/dpr, el.canvas.height/dpr);
+  }
+
+  function getCanvasPoint(evt) {
+    var rect = el.canvas.getBoundingClientRect();
+    var x = (evt.clientX - rect.left);
+    var y = (evt.clientY - rect.top);
+    return {x:x, y:y};
+  }
+
+  function dist(a,b) {
+    var dx=a.x-b.x, dy=a.y-b.y;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+
+  function avg(points) {
+    if (!points.length) return null;
+    var sx=0, sy=0;
+    for (var i=0;i<points.length;i++) { sx += points[i].x; sy += points[i].y; }
+    return {x:sx/points.length, y:sy/points.length};
+  }
+
+  function drawCross(x,y,color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x-14,y); ctx.lineTo(x+14,y);
+    ctx.moveTo(x,y-14); ctx.lineTo(x,y+14);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawCircle(x,y,r,color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+    // outline for visibility
+    ctx.strokeStyle = 'rgba(0,0,0,.55)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLine(a,b,color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawOverlayBar(text) {
+    var w = el.canvas.width/dpr;
+    var h = el.canvas.height/dpr;
+    var barH = 48;
+    ctx.save();
+    ctx.globalAlpha = 0.86;
+    ctx.fillStyle = '#0b1220';
+    ctx.fillRect(0, h-barH, w, barH);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, h-barH, w, barH);
+    ctx.fillStyle = '#e5e7eb';
+    ctx.font = 'bold 15px system-ui';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text || '', w-12, h-barH/2);
+    ctx.restore();
+  }
+
+  // --- Image fit
+  var view = {x:0,y:0,w:0,h:0, scale:1}; // image drawn into canvas area
+  function fitImage() {
+    var w = el.canvas.width/dpr;
+    var h = el.canvas.height/dpr;
+    // Keep some space for overlay bar, but we draw image full; overlay on top.
+    var img = state.image;
+    if (!img) return;
+    var s = Math.min(w / img.width, h / img.height);
+    var dw = img.width * s;
+    var dh = img.height * s;
+    var ox = (w - dw) / 2;
+    var oy = (h - dh) / 2;
+    view = {x:ox, y:oy, w:dw, h:dh, scale:s};
+    el.kpiScale.textContent = 'סקייל: ' + s.toFixed(3);
+  }
+
+  function draw() {
+    clear();
+    if (!state.image) {
+      drawOverlayBar(state.overlayMsg);
+      return;
+    }
+    fitImage();
+    // draw image
+    ctx.drawImage(state.image, view.x, view.y, view.w, view.h);
+
+    // marks are stored in canvas coords (CSS px), so keep them consistent with view.
+    if (state.desired) {
+      drawCross(state.desired.x, state.desired.y, '#22c55e');
+      drawCircle(state.desired.x, state.desired.y, 6, '#22c55e');
+    }
+
+    if (state.ruler.length) {
+      drawCircle(state.ruler[0].x, state.ruler[0].y, 7, '#38bdf8');
+      if (state.ruler.length === 2) {
+        drawCircle(state.ruler[1].x, state.ruler[1].y, 7, '#38bdf8');
+        drawLine(state.ruler[0], state.ruler[1], '#38bdf8');
+      }
+    }
+
+    if (state.hits.length) {
+      for (var i=0;i<state.hits.length;i++) drawCircle(state.hits[i].x, state.hits[i].y, 8, '#ef4444');
+      var c = avg(state.hits);
+      if (c) drawCross(c.x, c.y, '#ef4444');
+    }
+
+    // KPIs
+    el.kpiHits.textContent = 'פגיעות: ' + state.hits.length;
+    el.kpiGrid.textContent = 'px ל‑1 ס״מ: ' + (state.pixelsPerCm ? state.pixelsPerCm.toFixed(1) : '—');
+
+    drawOverlayBar(state.overlayMsg);
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    if (!state.image) {
+      state.overlayMsg = 'העלה תמונה כדי להתחיל';
+      el.modeLabel.textContent = 'מצב: העלה תמונה';
+      draw();
+      return;
+    }
+    if (mode === 'desired') {
+      el.modeLabel.textContent = 'מצב: נק׳ מכוון';
+      state.overlayMsg = 'שלב 1: לחץ על נקודת המכוון (נקודה רצויה)';
+    } else if (mode === 'hits') {
+      el.modeLabel.textContent = 'מצב: פגיעות';
+      state.overlayMsg = 'שלב 2: סמן פגיעות (כל לחיצה מוסיפה). להסרה: לחיצה ארוכה על "איפוס סימונים"';
+    } else if (mode === 'ruler') {
+      el.modeLabel.textContent = 'מצב: מדידת 1 ס״מ';
+      state.overlayMsg = 'שלב 3: לחץ 2 נקודות על מרחק של קובייה אחת (1 ס״מ או לפי "גודל קובייה")';
+    } else {
+      el.modeLabel.textContent = 'מצב: —';
+      state.overlayMsg = '';
+    }
+    draw();
+  }
+
+  function resetMarks() {
+    state.desired = null;
+    state.hits = [];
+    state.ruler = [];
+    state.pixelsPerCm = null;
+    state.result = null;
+    el.resultBox.innerHTML = '';
+    if (state.image) setMode('desired');
+    draw();
+  }
+
+  // --- Classification rules (as requested)
+  function classifyZeroing(groupSizeCm, correctionCm) {
+    if (groupSizeCm < 5 && correctionCm < 1) return {code:'EXCELLENT', text:'נשק מאופס'};
+    if (groupSizeCm < 5 && correctionCm > 1 && correctionCm < 4) return {code:'ADJUST_ONLY', text:'נדרש תיקון ללא מקצה נוסף'};
+    return {code:'NEED_ANOTHER_ROUND', text:'נדרש מקצה נוסף'};
+  }
+  function mapStatusForDb(code){
+    if(code==='EXCELLENT') return 'מאופס';
+    if(code==='ADJUST_ONLY') return 'מאופס-נדרש רק תיקון קליקים';
+    return 'לא מאופס';
+  }
+
+
+  function signDirHoriz(dxCm) {
+    // hits right => move LEFT
+    if (dxCm > 0.0001) return 'שמאלה';
+    if (dxCm < -0.0001) return 'ימינה';
+    return 'ללא';
+  }
+  function signDirVert(dyCm) {
+    // hits below (positive dy) => move UP (raise)
+    if (dyCm > 0.0001) return 'מעלה';
+    if (dyCm < -0.0001) return 'מטה';
+    return 'ללא';
+  }
+
+  function compute() {
+    el.resultBox.innerHTML = '';
+    state.result = null;
+
+    if (!state.image || !state.desired || state.hits.length < 1) {
+      el.resultBox.innerHTML = '<div class="hint">נדרש: תמונה + נקודת מכוון + לפחות פגיעה אחת.</div>';
+      return;
+    }
+
+    // pixelsPerCm: from ruler (preferred)
+    var gridSizeCm = parseFloat(el.gridSizeCm.value || '1');
+    if (gridSizeCm <= 0) gridSizeCm = 1;
+
+    if (state.ruler.length === 2) {
+      var px = dist(state.ruler[0], state.ruler[1]);
+      state.pixelsPerCm = px / gridSizeCm;
+    }
+
+    if (!state.pixelsPerCm || !isFinite(state.pixelsPerCm) || state.pixelsPerCm < 1) {
+      el.resultBox.innerHTML = '<div class="hint">לא הוגדר יחס px לס״מ. עבור ל"מדידת 1 ס״מ" והגדר 2 נקודות.</div>';
+      return;
+    }
+
+    var c = avg(state.hits);
+    var dxPx = c.x - state.desired.x;
+    var dyPx = c.y - state.desired.y;
+
+    var dxCm = dxPx / state.pixelsPerCm;
+    var dyCm = dyPx / state.pixelsPerCm;
+
+    var radialErrorCm = Math.sqrt(dxCm*dxCm + dyCm*dyCm);
+
+    // Group size: max pairwise distance in cm
+    var maxDpx = 0;
+    for (var i=0;i<state.hits.length;i++) {
+      for (var j=i+1;j<state.hits.length;j++) {
+        var d = dist(state.hits[i], state.hits[j]);
+        if (d > maxDpx) maxDpx = d;
+      }
+    }
+    var groupSizeCm = maxDpx / state.pixelsPerCm;
+
+    // clicks per square (square is gridSizeCm cm)
+    var elevCPS = parseFloat(el.elevClicksPerSquare.value || '0');
+    var windCPS = parseFloat(el.windClicksPerSquare.value || '0');
+    if (!isFinite(elevCPS) || elevCPS < 0) elevCPS = 0;
+    if (!isFinite(windCPS) || windCPS < 0) windCPS = 0;
+
+    var squaresX = Math.abs(dxCm) / gridSizeCm;
+    var squaresY = Math.abs(dyCm) / gridSizeCm;
+
+    var windClicks = Math.round(squaresX * windCPS);
+    var elevClicks = Math.round(squaresY * elevCPS);
+
+    var correctionHorizDir = signDirHoriz(dxCm);
+    var correctionVertDir = signDirVert(dyCm);
+
+    var status = classifyZeroing(groupSizeCm, radialErrorCm);
+
+    if(el.groupSizeCm) el.groupSizeCm.value = groupSizeCm.toFixed(2);
+    // status is stored to DB (no UI field)
+state.result = {
+      dxCm: dxCm, dyCm: dyCm,
+      radialErrorCm: radialErrorCm,
+      groupSizeCm: groupSizeCm,
+      windClicks: windClicks,
+      elevClicks: elevClicks,
+      correctionHorizDir: correctionHorizDir,
+      correctionVertDir: correctionVertDir,
+      status: status
+    };
+
+    // Render result (colored, and ALWAYS show corrections if not excellent)
+    var cls = (status.code === 'EXCELLENT') ? 'status-excellent' : (status.code === 'ADJUST_ONLY') ? 'status-adjust' : 'status-repeat';
+    var html = '<div class="status-box">';
+    html += '<div class="'+cls+'">סטטוס: ' + status.text + '</div>';
+    html += '<div class="status-sub">גודל מקבץ: ' + groupSizeCm.toFixed(2) + ' ס״מ</div>';
+    html += '<div class="status-sub">סטיית מרכז: ' + radialErrorCm.toFixed(2) + ' ס״מ</div>';
+
+    if (status.code !== 'EXCELLENT') {
+      html += '<div class="status-sub">נדרש תיקון: צידוד ' + windClicks + ' קליקים ' + correctionHorizDir +
+              ' , הגבהה ' + elevClicks + ' קליקים ' + correctionVertDir + '</div>';
+    }
+    html += '</div>';
+
+    el.resultBox.innerHTML = html;
+
+    // Save minimal record to Firestore (test)
+    try{
+      if(window.saveZeroing){
+        var shooter = (el.shooterName.value||'').trim() || '—';
+        var statusDb = mapStatusForDb(status.code);
+        var groupDb = (el.groupSizeCm && isFinite(parseFloat(el.groupSizeCm.value))) ? parseFloat(el.groupSizeCm.value) : groupSizeCm;
+        var now = new Date();
+        window.saveZeroing({
+          shooterName: shooter,
+          status: statusDb,
+          groupSizeCm: groupDb,
+          localDateTime: now.toLocaleString('he-IL')
+        }).then(function(){
+          state.overlayMsg = 'חושב תיקון ונשמר ב‑DB ✅';
+          draw();
+        }).catch(function(err){
+          showErr('Firestore save failed: ' + (err && err.message ? err.message : String(err)));
+        });
+      }
+    }catch(e){
+      showErr('Firestore save exception: ' + (e && e.message ? e.message : String(e)));
+    }
+
+    state.overlayMsg = 'חושב תיקון. אפשר ליצור תעודה.';
+    draw();
+  }
+
+  function drawCertificate() {
+    if (!state.image || !state.result) return;
+
+    // Prepare certificate canvas in same CSS size as main canvas
+    var w = el.canvas.width / dpr;
+    var h = el.canvas.height / dpr;
+
+    el.certCanvas.width = Math.round(w * dpr);
+    el.certCanvas.height = Math.round(h * dpr);
+    var c2 = el.certCanvas.getContext('2d');
+    c2.setTransform(dpr,0,0,dpr,0,0);
+
+    // draw current main canvas (includes marks and overlay)
+    c2.drawImage(el.canvas, 0, 0, w, h);
+
+    // bottom translucent panel
+    var panelH = 150;
+    var y0 = h - panelH;
+    c2.save();
+    c2.globalAlpha = 0.86;
+    c2.fillStyle = '#0b1220';
+    c2.fillRect(0, y0, w, panelH);
+    c2.globalAlpha = 1;
+    c2.strokeStyle = 'rgba(255,255,255,0.18)';
+    c2.lineWidth = 2;
+    c2.strokeRect(0, y0, w, panelH);
+
+    // details
+    var shooter = (el.shooterName.value || '').trim() || '—';
+    var company = (el.unitCompany.value || '').trim() || '—';
+    var platoon = (el.unitPlatoon.value || '').trim() || '—';
+    var squad = (el.unitSquad.value || '').trim() || '—';
+    var weaponName = (el.weaponType.value || '—') + (el.opticType.value ? (' / ' + el.opticType.value) : '');
+
+    var dt = new Date();
+    var dateStr = dt.toLocaleDateString('he-IL');
+    var timeStr = dt.toLocaleTimeString('he-IL', {hour:'2-digit',minute:'2-digit'});
+
+    var r = state.result;
+    var status = r.status;
+    var statusColor = (status.code === 'EXCELLENT') ? '#22c55e' : (status.code === 'ADJUST_ONLY') ? '#38bdf8' : '#ef4444';
+
+    var pad = 14;
+    c2.fillStyle = '#e5e7eb';
+    c2.textAlign = 'right';
+    c2.textBaseline = 'top';
+
+    c2.font = 'bold 18px system-ui';
+    c2.fillText('תעודת איפוס — צמ״מ 8109', w - pad, y0 + 10);
+
+    c2.font = '15px system-ui';
+    var baseY = y0 + 42, lh = 22;
+    c2.fillText('יורה: ' + shooter + ' | מסגרת: ' + company + ' | פלוגה: ' + platoon + ' | מחלקה: ' + squad, w - pad, baseY + 0*lh);
+    c2.fillText('תאריך: ' + dateStr + '  שעה: ' + timeStr + ' | נשק: ' + weaponName, w - pad, baseY + 1*lh);
+    c2.fillText('גודל מקבץ: ' + r.groupSizeCm.toFixed(2) + ' ס״מ | סטיית מרכז: ' + r.radialErrorCm.toFixed(2) + ' ס״מ', w - pad, baseY + 2*lh);
+
+    // Always show status line
+    c2.font = 'bold 18px system-ui';
+    c2.fillStyle = statusColor;
+    c2.fillText('סטטוס איפוס: ' + status.text, w - pad, y0 + 110);
+
+    // If correction required show extra line (also for "מקצה נוסף")
+    if (status.code !== 'EXCELLENT') {
+      c2.font = 'bold 14px system-ui';
+      c2.fillStyle = '#e5e7eb';
+      c2.fillText('נדרש תיקון: צידוד ' + r.windClicks + ' קליקים ' + r.correctionHorizDir +
+                  ' , הגבהה ' + r.elevClicks + ' קליקים ' + r.correctionVertDir,
+                  w - pad, y0 + 134);
+    }
+
+    c2.restore();
+  }
+
+  function downloadCert() {
+    drawCertificate();
+    var a = document.createElement('a');
+    a.download = 'zeroing_certificate.png';
+    a.href = el.certCanvas.toDataURL('image/png');
+    a.click();
+  }
+
+  // --- Weapons.json loader
+  function fillWeaponUI(WEAPON_RATIOS) {
+    // Populate weapon select
+    el.weaponType.innerHTML = '';
+    var weaponKeys = Object.keys(WEAPON_RATIOS || {});
+    weaponKeys.sort();
+    for (var i=0;i<weaponKeys.length;i++) {
+      var opt = document.createElement('option');
+      opt.value = weaponKeys[i];
+      opt.textContent = weaponKeys[i];
+      el.weaponType.appendChild(opt);
+    }
+    if (!weaponKeys.length) {
+      var opt2 = document.createElement('option');
+      opt2.value = '—';
+      opt2.textContent = '—';
+      el.weaponType.appendChild(opt2);
+    }
+
+    function updateOptics() {
+      var w = el.weaponType.value;
+      el.opticType.innerHTML = '';
+      var m = (WEAPON_RATIOS && WEAPON_RATIOS[w]) ? WEAPON_RATIOS[w] : null;
+      var optics = m ? Object.keys(m) : [];
+      optics.sort();
+      for (var j=0;j<optics.length;j++) {
+        var o = document.createElement('option');
+        o.value = optics[j];
+        o.textContent = optics[j];
+        el.opticType.appendChild(o);
+      }
+      if (!optics.length) {
+        var o2 = document.createElement('option'); o2.value='—'; o2.textContent='—'; el.opticType.appendChild(o2);
+      }
+      applyRatios();
+    }
+
+    function applyRatios() {
+      var w = el.weaponType.value;
+      var o = el.opticType.value;
+      var r = (WEAPON_RATIOS && WEAPON_RATIOS[w] && WEAPON_RATIOS[w][o]) ? WEAPON_RATIOS[w][o] : null;
+      if (r) {
+        if (typeof r.elevClicksPerSquare === 'number') el.elevClicksPerSquare.value = String(r.elevClicksPerSquare);
+        if (typeof r.windClicksPerSquare === 'number') el.windClicksPerSquare.value = String(r.windClicksPerSquare);
+      }
+    }
+
+    el.weaponType.addEventListener('change', updateOptics);
+    el.opticType.addEventListener('change', applyRatios);
+    updateOptics();
+  }
+
+  function loadWeapons() {
+    var u = new URL('weapons.json', window.location.href);
+    u.searchParams.set('v', String(Date.now())); // cache-buster
+    fetch(u.toString(), { cache:'no-store' })
+        .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        }
+      .then(function (json) {
+          state.weapons = json;
+          fillWeaponUI(json);
+      }
+      .catch(function(_err){
+        fillWeaponUI({});
+      });
+  }
+
+  // --- Auto grid detection (px per 1cm) : רץ ברקע, לא חוסם תהליך
+  function estimatePeriodAutocorr(signal) {
+    var n = signal.length;
+    if (n < 120) return null;
+
+    var mean = 0;
+    for (var i=0;i<n;i++) mean += signal[i];
+    mean /= n;
+
+    var s = new Float64Array(n);
+    for (var j=0;j<n;j++) {
+      var v = signal[j] - mean;
+      s[j] = v > 0 ? v : 0;
+    }
+
+    // smooth
+    var win = 11;
+    var sm = new Float64Array(n);
+    var acc = 0;
+    for (var k=0;k<n;k++) {
+      acc += s[k];
+      if (k >= win) acc -= s[k-win];
+      sm[k] = acc / Math.min(k+1, win);
+    }
+
+    var minLag = 10;
+    var maxLag = Math.min(260, Math.floor(n/2));
+    if (maxLag <= minLag + 5) return null;
+
+    var energy = 0;
+    for (var a=0;a<n;a++) energy += sm[a]*sm[a];
+    if (energy <= 1e-9) return null;
+
+    var bestLag = null;
+    var bestVal = -1;
+
+    for (var lag=minLag; lag<=maxLag; lag++) {
+      var c = 0;
+      for (var t=0; t<n-lag; t++) c += sm[t]*sm[t+lag];
+      var val = c / energy;
+      if (val > bestVal) { bestVal = val; bestLag = lag; }
+    }
+    if (!bestLag) return null;
+
+    // robustness score
+    var vals = [];
+    for (var L=Math.max(minLag, bestLag-12); L<=Math.min(maxLag, bestLag+12); L++) {
+      var c2=0;
+      for (var q=0;q<n-L;q++) c2 += sm[q]*sm[q+L];
+      vals.push(c2/energy);
+    }
+    vals.sort(function(x,y){return x-y;});
+    var med = vals[Math.floor(vals.length/2)] || 0;
+    var score = Math.max(0, bestVal - med);
+    if (bestVal < 0.08 || score < 0.015) return null;
+    return { period: bestLag, score: score };
+  }
+
+  function detectGridPxPerCmFromImage(img) {
+    // Work on downscaled image for performance
+    var maxW = 1100;
+    var s = Math.min(maxW / img.width, 1);
+    var w = Math.max(360, Math.round(img.width * s));
+    var h = Math.round(img.height * s);
+
+    var off = document.createElement('canvas');
+    off.width = w; off.height = h;
+    var ox = off.getContext('2d', { willReadFrequently: true });
+    ox.drawImage(img, 0, 0, w, h);
+
+    var id = ox.getImageData(0,0,w,h).data;
+    var gray = new Uint8Array(w*h);
+    for (var i=0,p=0;i<w*h;i++,p+=4) {
+      gray[i] = (id[p]*0.299 + id[p+1]*0.587 + id[p+2]*0.114) | 0;
+    }
+    function idx(x,y){ return y*w+x; }
+
+    // ROI candidates (avoid bottom table / large black shapes)
+    var rois = [
+      {x0:0.62,x1:0.95,y0:0.18,y1:0.62},
+      {x0:0.05,x1:0.38,y0:0.18,y1:0.62},
+      {x0:0.35,x1:0.65,y0:0.18,y1:0.62},
+      {x0:0.20,x1:0.80,y0:0.05,y1:0.35}
+    ];
+
+    var best = null;
+
+    for (var r=0;r<rois.length;r++) {
+      var R = rois[r];
+      var rx0 = Math.floor(w*R.x0), rx1=Math.floor(w*R.x1);
+      var ry0 = Math.floor(h*R.y0), ry1=Math.floor(h*R.y1);
+
+      var projX = new Float64Array(rx1-rx0);
+      var projY = new Float64Array(ry1-ry0);
+
+      for (var y=ry0+1; y<ry1-1; y++) {
+        for (var x=rx0+1; x<rx1-1; x++) {
+          // simple gradient magnitude (Sobel-ish)
+          var gx =
+            -gray[idx(x-1,y-1)] + gray[idx(x+1,y-1)] +
+            -2*gray[idx(x-1,y)] + 2*gray[idx(x+1,y)] +
+            -gray[idx(x-1,y+1)] + gray[idx(x+1,y+1)];
+          var gy =
+            -gray[idx(x-1,y-1)] -2*gray[idx(x,y-1)] -gray[idx(x+1,y-1)] +
+             gray[idx(x-1,y+1)] +2*gray[idx(x,y+1)] +gray[idx(x+1,y+1)];
+          var mag = Math.abs(gx)+Math.abs(gy);
+          projX[x-rx0] += mag;
+          projY[y-ry0] += mag;
+        }
+      }
+
+      var rx = estimatePeriodAutocorr(projX);
+      var ry = estimatePeriodAutocorr(projY);
+      if (!rx || !ry) continue;
+
+      var px = (rx.period + ry.period) / 2;
+      var agree = 1 - Math.min(1, Math.abs(rx.period-ry.period)/Math.max(px,1));
+      var score = (rx.score+ry.score)*0.5*(0.4+0.6*agree);
+
+      if (!best || score > best.score) best = { px: px, pxX: rx.period, pxY: ry.period, score: score };
+    }
+
+    if (!best) return null;
+
+    // Convert px in downscaled space to displayed canvas CSS px
+    var cssW = el.canvas.width / dpr;
+    var sView = cssW / img.width;
+    var pxPerCmCss = best.px * (sView / s);
+
+    var pxXCss = best.pxX * (sView / s);
+    var pxYCss = best.pxY * (sView / s);
+    var diffRatio = Math.abs(pxXCss-pxYCss)/Math.max(pxPerCmCss,1);
+
+    return { px: pxPerCmCss, lowConfidence: diffRatio > 0.22 };
+  }
+
+  function startAutoGridDetect(img) {
+    // non-blocking; allow manual ruler always
+    state.overlayMsg = 'מזהה קובייה אוטומטית… (עד 4 שנ׳)';
+    draw();
+
+    var done = false;
+    var t = setTimeout(function(){
+      if (done) return;
+      done = true;
+      state.overlayMsg = 'זיהוי קובייה אוטומטי לא הצליח. אפשר להמשיך ידנית (שלב 3).';
+      draw();
+    }, 4000);
+
+    setTimeout(function(){
+      try {
+        var g = detectGridPxPerCmFromImage(img);
+        if (done) return;
+        done = true;
+        clearTimeout(t);
+
+        if (g && isFinite(g.px) && g.px > 5) {
+          state.pixelsPerCm = g.px;
+          state.overlayMsg = g.lowConfidence ?
+            ('זוהתה קובייה אוטומטית (אמינות נמוכה). מומלץ לדייק ידנית: ' + g.px.toFixed(1) + ' px/ס״מ') :
+            ('זוהתה קובייה אוטומטית: ' + g.px.toFixed(1) + ' px/ס״מ');
+        } else {
+          state.overlayMsg = 'לא זוהתה רשת בביטחון. אפשר להמשיך ידנית (שלב 3).';
+        }
+        draw();
+      } catch (e) {
+        if (done) return;
+        done = true;
+        clearTimeout(t);
+        state.overlayMsg = 'שגיאה בזיהוי אוטומטי. אפשר להמשיך ידנית (שלב 3).';
+        draw();
+      }
+    }, 50);
+  }
+
+
+  // --- Events
+  el.fileInput.addEventListener('change', function() {
+    var f = el.fileInput.files && el.fileInput.files[0];
+    if (!f) return;
+
+    var url = URL.createObjectURL(f);
+    var img = new Image();
+    img.onload = function() {
+      state.image = img;
+
+      // Set canvas height based on image ratio for better layout
+      var wrapW = el.canvas.getBoundingClientRect().width || 900;
+      var ratio = img.height / img.width;
+      var desiredH = Math.min(820, Math.max(420, wrapW * ratio));
+      el.canvas.style.height = desiredH.toFixed(0) + 'px';
+
+      resetMarks();
+      setMode('desired');
+      draw();
+
+      // Auto detect grid (non-blocking)
+      startAutoGridDetect(img);
+
+
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = function() {
+      showErr('שגיאה בטעינת תמונה. נסה קובץ אחר.');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+
+  el.canvas.addEventListener('click', function(evt) {
+    if (!state.image) return;
+    var p = getCanvasPoint(evt);
+
+    if (state.mode === 'desired') {
+      state.desired = p;
+      // auto move to hits
+      setMode('hits');
+      return;
+    }
+
+    if (state.mode === 'hits') {
+      state.hits.push(p);
+      draw();
+      return;
+    }
+
+    if (state.mode === 'ruler') {
+      if (state.ruler.length >= 2) state.ruler = [];
+      state.ruler.push(p);
+      if (state.ruler.length === 2) {
+        var gridSizeCm = parseFloat(el.gridSizeCm.value || '1');
+        if (gridSizeCm <= 0) gridSizeCm = 1;
+        var px = dist(state.ruler[0], state.ruler[1]);
+        state.pixelsPerCm = px / gridSizeCm;
+        state.overlayMsg = 'מדידה נשמרה: ' + state.pixelsPerCm.toFixed(1) + ' px ל‑1 ס״מ';
+      }
+      draw();
+      return;
+    }
+  });
+
+  // Long press reset to remove last hit (optional)
+  var resetTimer = null;
+  el.btnReset.addEventListener('pointerdown', function() {
+    resetTimer = setTimeout(function() {
+      // long press: remove last hit
+      if (state.hits.length) state.hits.pop();
+      draw();
+    }, 650);
+  });
+  el.btnReset.addEventListener('pointerup', function() {
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = null;
+  });
+  el.btnReset.addEventListener('click', function() {
+    resetMarks();
+  });
+
+  el.btnModeDesired.addEventListener('click', function(){ setMode('desired'); });
+  el.btnModeHits.addEventListener('click', function(){ setMode('hits'); });
+  el.btnModeRuler.addEventListener('click', function(){ setMode('ruler'); });
+
+  el.btnCompute.addEventListener('click', compute);
+  el.btnCert.addEventListener('click', downloadCert);
+
+  window.addEventListener('resize', function(){ draw(); });
+
+  // init
+  clear();
+  drawOverlayBar(state.overlayMsg);
+  loadListsConfig();
+  loadWeapons();
+})();
+</script>
+
+<!-- Firebase (Firestore) — fill firebaseConfig from Firebase Console (Project settings → Your apps → Web) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "XXX",
+    authDomain: "XXX",
+    projectId: "zeroing-db",
+    storageBucket: "XXX",
+    messagingSenderId: "XXX",
+    appId: "XXX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Called from the main script after Compute
+  window.saveZeroing = async function(payload){
+    await addDoc(collection(db, "zeroing_submissions"), {
+      ...payload,
+      createdAt: serverTimestamp()
+    });
+  };
+</script>
+
+</body>
+</html>
