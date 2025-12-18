@@ -63,6 +63,8 @@
 
                 <label>שם היורה</label>
                 <input id="shooterName" placeholder="שם מלא" />
+                <label>מספר אישי</label>
+                <input id="personalId" type="text" inputmode="numeric" placeholder="לדוגמה: 1234567" />
 
                 <div class="row">
                     <div>
@@ -554,6 +556,7 @@
 
                 el.resultBox.innerHTML = html;
                 // --- Save minimal record to Firestore (test)
+
                 try {
                     var shooterName = (el.shooterName.value || '').trim();
 
@@ -566,16 +569,39 @@
                     // local timestamp לקריאה (בנוסף ל-createdAt של השרת)
                     var localDateTime = new Date().toISOString();
 
-                    if (window.saveZeroing) {
-                        window.saveZeroing({
-                            shooterName: shooterName,
-                            status: statusForDb,
-                            groupSizeCm: Number(groupSizeCm.toFixed(2)),
-                            localDateTime: localDateTime
-                        }).catch(function (err) {
-                            console.error('Firestore save failed:', err);
-                        });
+                    try {
+                        const shooterName = (el.shooterName?.value || '').trim();
+                        const personalId = (document.getElementById('personalId')?.value || '').trim();
+
+                        // אצלך זה מגיע מ-lists.json / selects קיימים
+                        const battalion = (el.unitBattalion?.value || '').trim(); // או el.battalion / תלוּי בשמות אצלך
+                        const company = (el.unitCompany?.value || '').trim();
+                        const platoon = (el.unitPlatoon?.value || '').trim();
+
+                        // סטאטוס לפי מה שכבר מחושב אצלך
+                        const statusForDb =
+                            (status.code === 'EXCELLENT') ? 'מאופס' :
+                                (status.code === 'ADJUST_ONLY') ? 'מאופס-נדרש רק תיקון קליקים' :
+                                    'לא מאופס';
+
+                        const localDateTime = new Date().toISOString(); // לקריאה/דיבוג (בנוסף ל-createdAt של השרת)
+
+                        if (window.saveZeroing) {
+                            window.saveZeroing({
+                                shooterName,
+                                personalId,
+                                battalion,
+                                company,
+                                platoon,
+                                groupSizeCm: Number(groupSizeCm.toFixed(2)),
+                                status: statusForDb,
+                                localDateTime
+                            }).catch(err => console.error('Firestore save failed:', err));
+                        }
+                    } catch (e) {
+                        console.error('Save wrapper error:', e);
                     }
+
                 } catch (e) {
                     console.error('Save wrapper error:', e);
                 }
@@ -1012,7 +1038,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-          const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyDmWczKhA4EQEPDGx1MpcsLSsOFkh953mY",
             authDomain: "zeroing-db.firebaseapp.com",
             projectId: "zeroing-db",
@@ -1020,7 +1046,7 @@
             messagingSenderId: "318886269966",
             appId: "1:318886269966:web:2657c7e9ccaba8ed47585f",
             measurementId: "G-8FHDJ6Q74L"
-          };
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -1036,5 +1062,4 @@
 
 </body>
 </html>
-
 
