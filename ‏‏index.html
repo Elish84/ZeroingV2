@@ -574,9 +574,9 @@
                         const personalId = (document.getElementById('personalId')?.value || '').trim();
 
                         // אצלך זה מגיע מ-lists.json / selects קיימים
-                        const battalion = (el.unitCompany?.value || '').trim(); // יחידה / גדוד
-                        const company = (el.unitPlatoon?.value || '').trim(); // פלוגה
-                        const platoon = (el.unitSquad?.value || '').trim();   // מחלקה
+                        const battalion = (el.unitBattalion?.value || '').trim(); // גדוד/יחידה
+                        const company   = (el.unitCompany?.value   || '').trim(); // פלוגה
+                        const platoon   = (el.unitPlatoon?.value   || '').trim(); // מחלקהמחלקה
 
 
                         // סטאטוס לפי מה שכבר מחושב אצלך
@@ -1064,4 +1064,5 @@
 
 </body>
 </html>
+
 
