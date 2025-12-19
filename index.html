@@ -570,34 +570,34 @@
                     var localDateTime = new Date().toISOString();
 
                     try {
-                        const shooterName = (el.shooterName?.value || '').trim();
-                        const personalId = (document.getElementById('personalId')?.value || '').trim();
+                        // --- Save record to Firestore
+                    const shooterName = (el.shooterName?.value || '').trim();
+                    const personalId  = (document.getElementById('personalId')?.value || '').trim();
+                    
+                    const battalion = (el.unitBattalion?.value || '').trim(); // יחידה/גדוד
+                    const company   = (el.unitCompany?.value   || '').trim(); // פלוגה
+                    const platoon   = (el.unitPlatoon?.value   || '').trim(); // מחלקה
+                    
+                    const statusForDb =
+                      (status.code === 'EXCELLENT')   ? 'מאופס' :
+                      (status.code === 'ADJUST_ONLY') ? 'מאופס-נדרש רק תיקון קליקים' :
+                                                       'לא מאופס';
+                    
+                    const localDateTime = new Date().toISOString();
+                    
+                    if (window.saveZeroing) {
+                      window.saveZeroing({
+                        shooterName,
+                        personalId,
+                        battalion,
+                        company,
+                        platoon,
+                        groupSizeCm: Number(groupSizeCm.toFixed(2)),
+                        status: statusForDb,
+                        localDateTime
+                      }).catch(err => console.error('Firestore save failed:', err));
+                    }
 
-                        // אצלך זה מגיע מ-lists.json / selects קיימים
-                        const battalion = (el.unitBattalion?.value || '').trim(); // גדוד/יחידה
-                        const company   = (el.unitCompany?.value   || '').trim(); // פלוגה
-                        const platoon   = (el.unitPlatoon?.value   || '').trim(); // מחלקהמחלקה
-
-
-                        // סטאטוס לפי מה שכבר מחושב אצלך
-                        const statusForDb =
-                            (status.code === 'EXCELLENT') ? 'מאופס' :
-                                (status.code === 'ADJUST_ONLY') ? 'מאופס-נדרש רק תיקון קליקים' :
-                                    'לא מאופס';
-
-                        const localDateTime = new Date().toISOString(); // לקריאה/דיבוג (בנוסף ל-createdAt של השרת)
-
-                        if (window.saveZeroing) {
-                            window.saveZeroing({
-                                shooterName,
-                                personalId,
-                                battalion,      // גדוד / יחידה
-                                company,        // פלוגה
-                                platoon,        // מחלקה
-                                groupSizeCm: Number(groupSizeCm.toFixed(2)),
-                                status: statusForDb,
-                                localDateTime
-                            });
 .catch(err => console.error('Firestore save failed:', err));
                         }
                     } catch (e) {
@@ -1064,6 +1064,7 @@
 
 </body>
 </html>
+
 
 
 
