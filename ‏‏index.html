@@ -69,18 +69,18 @@
                 <div class="row">
                     <div>
                         <label>יחידה</label>
-                        <select id="unitCompany"></select>
+                        <select id="unitBattalion"></select>
                     </div>
                     <div>
                         <label>פלוגה</label>
-                        <select id="unitPlatoon"></select>
+                        <select id="unitCompany"></select>
                     </div>
                 </div>
 
                 <div class="row">
                     <div>
                         <label>מחלקה</label>
-                        <select id="unitSquad"></select>
+                        <select id="unitPlatoon"></select>
                     </div>
                     <div>
                         <label>סוג נשק</label>
@@ -190,7 +190,7 @@
                         applyLists();
                     })
                     .catch(function (_err) {
-                        LISTS = { unit: [], company: [], squad: [] };
+                        LISTS = { battalion: [], company: [], platoon: [] };
                         applyLists();
                     });
             }
@@ -204,16 +204,16 @@
                     for (var i = 0; i < (arr || []).length; i++) out.push({ value: String(arr[i]), label: String(arr[i]) });
                     return out;
                 }
-                fillSelect(el.unitCompany, toOpts((LISTS && LISTS.unit) || []));
-                fillSelect(el.unitPlatoon, toOpts((LISTS && LISTS.company) || []));
-                fillSelect(el.unitSquad, toOpts((LISTS && LISTS.squad) || []));
+                fillSelect(el.unitBattalion, toOpts((LISTS && LISTS.battalion) || []));
+                fillSelect(el.unitCompany, toOpts((LISTS && LISTS.company) || []));
+                fillSelect(el.unitPlatoon, toOpts((LISTS && LISTS.platoon) || []));
             }
             // --- Elements
             var el = {
                 shooterName: document.getElementById('shooterName'),
+                unitBattalion: document.getElementById('unitBattalion'),
                 unitCompany: document.getElementById('unitCompany'),
-                unitPlatoon: document.getElementById('unitPlatoon'),
-                unitSquad: document.getElementById('unitSquad'),
+                unitPlatoon: document.getElementById('unitPlatoon'), 
                 weaponType: document.getElementById('weaponType'),
                 opticType: document.getElementById('opticType'),
                 elevClicksPerSquare: document.getElementById('elevClicksPerSquare'),
@@ -641,9 +641,9 @@
 
                 // details
                 var shooter = (el.shooterName.value || '').trim() || '—';
+                var battalion = (el.unitBattalion.value || '').trim() || '—';
                 var company = (el.unitCompany.value || '').trim() || '—';
-                var platoon = (el.unitPlatoon.value || '').trim() || '—';
-                var squad = (el.unitSquad.value || '').trim() || '—';
+                var platoon = (el.unitPlatoon.value || '').trim() || '—'; 
                 var weaponName = (el.weaponType.value || '—') + (el.opticType.value ? (' / ' + el.opticType.value) : '');
 
                 var dt = new Date();
@@ -664,7 +664,7 @@
 
                 c2.font = '15px system-ui';
                 var baseY = y0 + 42, lh = 22;
-                c2.fillText('יורה: ' + shooter + ' | מסגרת: ' + company + ' | פלוגה: ' + platoon + ' | מחלקה: ' + squad, w - pad, baseY + 0 * lh);
+                c2.fillText('יורה: ' + shooter + ' | מסגרת: ' + battalion + ' | פלוגה: ' + company + ' | מחלקה: ' + platoon, w - pad, baseY + 0 * lh);
                 c2.fillText('תאריך: ' + dateStr + '  שעה: ' + timeStr + ' | נשק: ' + weaponName, w - pad, baseY + 1 * lh);
                 c2.fillText('גודל מקבץ: ' + r.groupSizeCm.toFixed(2) + ' ס״מ | סטיית מרכז: ' + r.radialErrorCm.toFixed(2) + ' ס״מ', w - pad, baseY + 2 * lh);
 
@@ -1064,5 +1064,6 @@
 
 </body>
 </html>
+
 
 
