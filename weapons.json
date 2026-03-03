@@ -1,16 +1,16 @@
 {
   "M4": {
     "iron":   { "elevClicksPerSquare": 3.0, "windClicksPerSquare": 3.0 },
-    "optic":  { "elevClicksPerSquare": 2.0, "windClicksPerSquare": 2.0 },
+    "optic":  { "elevClicksPerSquare": 1, "windClicksPerSquare": 1 },
     "trijicon": { "elevClicksPerSquare":4, "windClicksPerSquare": 4 }
   },
   "M16": {
-    "iron":   { "elevClicksPerSquare": 1.3, "windClicksPerSquare": 1.3 },
+    "iron":   { "elevClicksPerSquare": 1.42, "windClicksPerSquare": 1.1 },
     "optic":  { "elevClicksPerSquare": 1, "windClicksPerSquare": 1 },
-    "trijicon": { "elevClicksPerSquare": 1.5, "windClicksPerSquare": 1.5 }
+    "trijicon": { "elevClicksPerSquare": 4, "windClicksPerSquare": 4 }
   },
   "Tavor": {
-    "optic":  { "elevClicksPerSquare": 2.0, "windClicksPerSquare": 2.0 },
-    "trijicon": { "elevClicksPerSquare": 1.5, "windClicksPerSquare": 1.5 }
+    "optic":  { "elevClicksPerSquare": 1, "windClicksPerSquare": 1 },
+    "trijicon": { "elevClicksPerSquare": 4, "windClicksPerSquare": 4 }
   }
 }
